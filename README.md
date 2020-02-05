@@ -37,4 +37,6 @@ $ git clone https://github.com/fphammerle/ics2vdir.git
 $ cd ics2vdir
 $ pipenv sync --dev
 $ pipenv run pylint ics2vdir
+$ pipenv run mypy ics2vdir
+$ pipenv run pytest --cov=ics2vdir --cov-report=term-missing --cov-fail-under=100
 ```
