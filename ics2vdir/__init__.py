@@ -28,6 +28,13 @@ _LOGGER = logging.getLogger(__name__)
 
 
 def _event_prop_equal(prop_a, prop_b) -> bool:
+    if isinstance(prop_a, icalendar.prop.vDDDLists):
+        # https://www.kanzaki.com/docs/ical/exdate.html
+        return (
+            all(_event_prop_equal(*pair) for pair in zip(prop_a.dts, prop_b.dts))
+            and len(prop_a.dts) == len(prop_b.dts)
+            and prop_a.params == prop_b.params
+        )
     if isinstance(prop_a, (icalendar.prop.vDDDTypes, icalendar.prop.vCategory)):
         # pylint: disable=unidiomatic-typecheck
         return type(prop_a) == type(prop_b) and vars(prop_a) == vars(prop_b)
@@ -41,13 +48,7 @@ def _events_equal(event_a: icalendar.cal.Event, event_b: icalendar.cal.Event) ->
         prop_b = event_b[key]
         if not _event_prop_equal(prop_a, prop_b):
             _LOGGER.debug(
-                "%s/%s: %r(%r) != %r(%r)",
-                event_a["UID"],
-                key,
-                prop_a,
-                vars(prop_a),
-                prop_b,
-                vars(prop_b),
+                "%s/%s: %r != %r", event_a["UID"], key, prop_a, prop_b,
             )
             return False
     return True
