@@ -16,7 +16,6 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import argparse
-import filecmp
 import logging
 import os
 import pathlib
@@ -28,6 +27,21 @@ import icalendar
 _LOGGER = logging.getLogger(__name__)
 
 
+def _event_prop_equal(prop_a, prop_b) -> bool:
+    if isinstance(prop_a, icalendar.prop.vDDDTypes):
+        return vars(prop_a) == vars(prop_b)
+    return prop_a == prop_b
+
+
+def _events_equal(event_a: icalendar.cal.Event, event_b: icalendar.cal.Event) -> bool:
+    for key, prop_a in event_a.items():
+        if key == "DTSTAMP":
+            continue
+        if not _event_prop_equal(prop_a, event_b[key]):
+            return False
+    return True
+
+
 def _export_event(event: icalendar.cal.Event, output_dir_path: pathlib.Path) -> None:
     temp_fd, temp_path = tempfile.mkstemp(prefix="ics2vdir-", suffix=".ics")
     os.write(temp_fd, event.to_ical())
@@ -36,11 +50,14 @@ def _export_event(event: icalendar.cal.Event, output_dir_path: pathlib.Path) -> 
     if not output_path.exists():
         _LOGGER.info("creating %s", output_path)
         os.rename(temp_path, output_path)
-    elif not filecmp.cmp(temp_path, output_path):
-        _LOGGER.info("updating %s", output_path)
-        os.rename(temp_path, output_path)
     else:
-        _LOGGER.debug("%s is up to date", output_path)
+        with open(output_path, "rb") as current_file:
+            current_event = icalendar.Event.from_ical(current_file.read())
+        if _events_equal(event, current_event):
+            _LOGGER.debug("%s is up to date", output_path)
+        else:
+            _LOGGER.info("updating %s", output_path)
+            os.rename(temp_path, output_path)
 
 
 def _main():
