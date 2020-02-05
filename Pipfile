@@ -8,6 +8,7 @@ ical2vdir = {editable = true,path = "."}
 black = "==19.10b0"
 mypy = "*"
 pylint = "*"
+pylint-import-requirements = "*"
 pytest = "*"
 pytest-cov = "*"
 

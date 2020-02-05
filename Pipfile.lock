@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "e2c5a8e7d652e4d9105a73c1517d1855c96063bd26c098993d609af57f9af77d"
+            "sha256": "4e0b3d32252e4ba35e31b00f622c9de93236500f8f36174175d2b4a2b934561d"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -89,16 +89,16 @@
             ],
             "version": "==5.0.3"
         },
+        "ical2vdir": {
+            "editable": true,
+            "path": "."
+        },
         "icalendar": {
             "hashes": [
                 "sha256:347151cb935f5f2f83d58f6dd8aef8558df69f6c1709f1d2cab2000b36def299",
                 "sha256:45b9bd1b59107b25db688160ebd8d3916b5a8fae65992dae5d7fc0b102a9ab21"
             ],
             "version": "==4.0.4"
-        },
-        "ical2vdir": {
-            "editable": true,
-            "path": "."
         },
         "importlib-metadata": {
             "hashes": [
@@ -217,6 +217,14 @@
             ],
             "index": "pypi",
             "version": "==2.4.4"
+        },
+        "pylint-import-requirements": {
+            "hashes": [
+                "sha256:2a2d6bf111e98af48fc5398bab65aea830319c6d02555c4f8660734a8732d6a4",
+                "sha256:d975131b2bc1c839f1a9a0f283665540aa4b516bf986119f527f43d7c7d8e414"
+            ],
+            "index": "pypi",
+            "version": "==1.0.3"
         },
         "pyparsing": {
             "hashes": [
