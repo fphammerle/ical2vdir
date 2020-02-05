@@ -1,5 +1,8 @@
 # ical2vdir
 
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Last Release](https://img.shields.io/pypi/v/ical2vdir.svg)](https://pypi.org/project/ical2vdir/#history)
+
 Convert / split single [iCalendar](https://en.wikipedia.org/wiki/ICalendar)
 `.ics` file into a
 [vdir](https://vdirsyncer.readthedocs.io/en/stable/vdir.html) directory.
