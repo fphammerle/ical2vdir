@@ -16,6 +16,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import argparse
+import datetime
 import logging
 import os
 import pathlib
@@ -59,11 +60,31 @@ def _events_equal(event_a: icalendar.cal.Event, event_b: icalendar.cal.Event) ->
     return True
 
 
+def _datetime_basic_isoformat(dt_obj: datetime.datetime) -> str:
+    # .isoformat() inserts unwanted separators
+    return dt_obj.strftime("%Y%m%dT%H%M%S%z")
+
+
+def _event_vdir_filename(event: icalendar.cal.Event) -> str:
+    # > An item should contain a UID property as described by the vCard and iCalendar standards.
+    # > [...] The filename should have similar properties as the UID of the file content.
+    # > However, there is no requirement for these two to be the same.
+    # > Programs may choose to store additional metadata in that filename, [...]
+    # https://vdirsyncer.readthedocs.io/en/stable/vdir.html#basic-structure
+    output_filename = str(event["UID"])
+    if "RECURRENCE-ID" in event:
+        recurrence_id = event["RECURRENCE-ID"]
+        assert isinstance(recurrence_id.dt, datetime.datetime), recurrence_id.dt
+
+        output_filename += "." + _datetime_basic_isoformat(recurrence_id.dt)
+    return output_filename + ".ics"
+
+
 def _export_event(event: icalendar.cal.Event, output_dir_path: pathlib.Path) -> None:
     temp_fd, temp_path = tempfile.mkstemp(prefix="ics2vdir-", suffix=".ics")
     os.write(temp_fd, event.to_ical())
     os.close(temp_fd)
-    output_path = output_dir_path.joinpath("{}.ics".format(event["UID"]))
+    output_path = output_dir_path.joinpath(_event_vdir_filename(event))
     if not output_path.exists():
         _LOGGER.info("creating %s", output_path)
         os.rename(temp_path, output_path)
@@ -81,6 +102,7 @@ def _main():
     logging.basicConfig(
         format="%(message)s",
         # datefmt='%Y-%m-%dT%H:%M:%S%z',
+        # level=logging.DEBUG,
         level=logging.INFO,
     )
     argparser = argparse.ArgumentParser(
