@@ -28,11 +28,16 @@ _LOGGER = logging.getLogger(__name__)
 
 
 def _event_prop_equal(prop_a, prop_b) -> bool:
+    if isinstance(prop_a, list):
+        return len(prop_a) == len(prop_b) and all(
+            _event_prop_equal(*pair) for pair in zip(prop_a, prop_b)
+        )
     if isinstance(prop_a, icalendar.prop.vDDDLists):
         # https://www.kanzaki.com/docs/ical/exdate.html
         return (
-            all(_event_prop_equal(*pair) for pair in zip(prop_a.dts, prop_b.dts))
+            isinstance(prop_b, icalendar.prop.vDDDLists)
             and len(prop_a.dts) == len(prop_b.dts)
+            and all(_event_prop_equal(*pair) for pair in zip(prop_a.dts, prop_b.dts))
             and prop_a.params == prop_b.params
         )
     if isinstance(prop_a, (icalendar.prop.vDDDTypes, icalendar.prop.vCategory)):
