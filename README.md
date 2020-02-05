@@ -29,3 +29,12 @@ Remove files from output directory that are not available in input:
 ```sh
 $ ics2vdir < input.ics --output-dir /some/path --delete
 ```
+
+### Run Tests
+
+```sh
+$ git clone https://github.com/fphammerle/ics2vdir.git
+$ cd ics2vdir
+$ pipenv sync --dev
+$ pipenv run pylint ics2vdir
+```

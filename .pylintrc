@@ -1,0 +1,4 @@
+[MESSAGE CONTROL]
+
+disable=bad-continuation, # black
+        missing-module-docstring
