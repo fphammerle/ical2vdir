@@ -6,11 +6,21 @@ Convert / split single [iCalendar](https://en.wikipedia.org/wiki/ICalendar)
 
 Compatible with [khal](https://github.com/pimutils/khal).
 
-## setup
+## Setup
 
 ```sh
 $ sudo apt-get install python3-icalendar # optional
 $ pip3 install --user --upgrade ics2vdir
 ```
 
-## usage
+## Usage
+
+```sh
+$ ics2vdir < input.ics --output-dir /some/path
+```
+
+Or download `.ics` from [Google Calendar](https://calendar.google.com/):
+```sh
+$ curl https://calendar.google.com/calendar/ical/someone%40gmail.com/private-1234/basic.ics \
+    | pipenv run ics2vdir --output-dir output/
+```
