@@ -53,7 +53,11 @@ def _events_equal(event_a: icalendar.cal.Event, event_b: icalendar.cal.Event) ->
     for key, prop_a in event_a.items():
         if key == "DTSTAMP":
             continue
-        prop_b = event_b[key]
+        try:
+            prop_b = event_b[key]
+        except KeyError:
+            _LOGGER.debug("%s: new key %s", event_a["UID"], key)
+            return False
         if not _event_prop_equal(prop_a, prop_b):
             _LOGGER.debug(
                 "%s/%s: %r != %r", event_a["UID"], key, prop_a, prop_b,
