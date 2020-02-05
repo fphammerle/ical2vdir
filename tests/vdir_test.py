@@ -1,4 +1,4 @@
-# ics2vdir - convert .ics file to vdir directory
+# ical2vdir - convert .ics file to vdir directory
 #
 # Copyright (C) 2020 Fabian Peter Hammerle <fabian@hammerle.me>
 #
@@ -21,7 +21,7 @@ import pathlib
 import icalendar.cal
 import pytest
 
-import ics2vdir
+import ical2vdir
 
 
 def _normalize_ical(ical: bytes) -> bytes:
@@ -76,14 +76,14 @@ END:VEVENT
 )
 def test__event_vdir_filename(event_ical, expected_filename):
     event = icalendar.cal.Event.from_ical(event_ical)
-    assert ics2vdir._event_vdir_filename(event) == expected_filename
+    assert ical2vdir._event_vdir_filename(event) == expected_filename
 
 
 @pytest.mark.parametrize("event_ical", [_SINGLE_EVENT_ICAL])
 def test__export_event_create(tmpdir, event_ical):
     temp_path = pathlib.Path(tmpdir)
     event = icalendar.cal.Event.from_ical(event_ical)
-    ics2vdir._export_event(event, temp_path)
+    ical2vdir._export_event(event, temp_path)
     (ics_path,) = temp_path.iterdir()
     assert ics_path.name == "1qa2ws3ed4rf5tg@google.com.ics"
     assert ics_path.read_bytes() == _SINGLE_EVENT_ICAL
@@ -93,9 +93,9 @@ def test__export_event_create(tmpdir, event_ical):
 def test__export_event_update(tmpdir, event_ical):
     temp_path = pathlib.Path(tmpdir)
     event = icalendar.cal.Event.from_ical(event_ical)
-    ics2vdir._export_event(event, temp_path)
+    ical2vdir._export_event(event, temp_path)
     event["SUMMARY"] += " suffix"
-    ics2vdir._export_event(event, temp_path)
+    ical2vdir._export_event(event, temp_path)
     (ics_path,) = temp_path.iterdir()
     assert ics_path.name == event["UID"] + ".ics"
     assert ics_path.read_bytes() == _SINGLE_EVENT_ICAL.replace(
@@ -107,9 +107,9 @@ def test__export_event_update(tmpdir, event_ical):
 def test__export_event_unchanged(tmpdir, event_ical):
     temp_path = pathlib.Path(tmpdir)
     event = icalendar.cal.Event.from_ical(event_ical)
-    ics2vdir._export_event(event, temp_path)
+    ical2vdir._export_event(event, temp_path)
     (ics_path,) = temp_path.iterdir()
     old_stat = copy.deepcopy(ics_path.stat())
-    ics2vdir._export_event(event, temp_path)
+    ical2vdir._export_event(event, temp_path)
     assert ics_path.stat() == old_stat
     assert ics_path.read_bytes() == _SINGLE_EVENT_ICAL

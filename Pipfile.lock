@@ -96,7 +96,7 @@
             ],
             "version": "==4.0.4"
         },
-        "ics2vdir": {
+        "ical2vdir": {
             "editable": true,
             "path": "."
         },

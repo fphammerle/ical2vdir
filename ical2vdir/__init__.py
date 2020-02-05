@@ -1,4 +1,4 @@
-# ics2vdir - convert .ics file to vdir directory
+# ical2vdir - convert .ics file to vdir directory
 #
 # Copyright (C) 2020 Fabian Peter Hammerle <fabian@hammerle.me>
 #
@@ -90,7 +90,7 @@ def _export_event(
     event: icalendar.cal.Event, output_dir_path: pathlib.Path
 ) -> pathlib.Path:
     temp_fd, temp_path = tempfile.mkstemp(
-        prefix="ics2vdir-", suffix=_VDIR_EVENT_FILE_EXTENSION
+        prefix="ical2vdir-", suffix=_VDIR_EVENT_FILE_EXTENSION
     )
     os.write(temp_fd, event.to_ical())
     os.close(temp_fd)

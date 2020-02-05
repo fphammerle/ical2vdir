@@ -1,4 +1,4 @@
-# ics2vdir - convert .ics file to vdir directory
+# ical2vdir - convert .ics file to vdir directory
 #
 # Copyright (C) 2020 Fabian Peter Hammerle <fabian@hammerle.me>
 #
@@ -18,7 +18,7 @@
 import icalendar.cal
 import pytest
 
-import ics2vdir
+import ical2vdir
 
 
 @pytest.mark.parametrize(
@@ -148,4 +148,4 @@ def test__events_equal(event_a_ical, event_b_ical, expected_result):
     event_a = icalendar.cal.Event.from_ical(event_a_ical)
     event_b = icalendar.cal.Event.from_ical(event_b_ical)
     # pylint: disable=protected-access
-    assert ics2vdir._events_equal(event_a, event_b) == expected_result
+    assert ical2vdir._events_equal(event_a, event_b) == expected_result

@@ -1,4 +1,4 @@
-# ics2vdir - convert .ics file to vdir directory
+# ical2vdir - convert .ics file to vdir directory
 #
 # Copyright (C) 2020 Fabian Peter Hammerle <fabian@hammerle.me>
 #
@@ -21,7 +21,7 @@ import typing
 import pytest
 from icalendar.prop import vCalAddress, vDDDLists, vDDDTypes, vInt, vRecur, vText
 
-from ics2vdir import _event_prop_equal
+from ical2vdir import _event_prop_equal
 
 _CEST = datetime.timezone(datetime.timedelta(hours=+2))
 

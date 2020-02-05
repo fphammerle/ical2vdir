@@ -1,4 +1,4 @@
-# ics2vdir - convert .ics file to vdir directory
+# ical2vdir - convert .ics file to vdir directory
 #
 # Copyright (C) 2020 Fabian Peter Hammerle <fabian@hammerle.me>
 #
@@ -20,7 +20,7 @@ import pathlib
 import setuptools
 
 setuptools.setup(
-    name="ics2vdir",
+    name="ical2vdir",
     use_scm_version=True,
     packages=setuptools.find_packages(),
     description="convert .ics file to vdir directory",
@@ -28,7 +28,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     author="Fabian Peter Hammerle",
     author_email="fabian@hammerle.me",
-    url="https://github.com/fphammerle/ics2vdir",
+    url="https://github.com/fphammerle/ical2vdir",
     license="GPLv3+",
     keywords=["calendar", "event", "iCalendar", "ics", "sync", "vdir",],
     classifiers=[
@@ -40,7 +40,7 @@ setuptools.setup(
         "Programming Language :: Python :: 3",
         "Topic :: Utilities",
     ],
-    entry_points={"console_scripts": ["ics2vdir = ics2vdir:_main",]},
+    entry_points={"console_scripts": ["ical2vdir = ical2vdir:_main",]},
     install_requires=["icalendar>=4,<5"],
     setup_requires=["setuptools_scm"],
     tests_require=["pytest"],

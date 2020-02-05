@@ -1,4 +1,4 @@
-# ics2vdir - convert .ics file to vdir directory
+# ical2vdir - convert .ics file to vdir directory
 #
 # Copyright (C) 2020 Fabian Peter Hammerle <fabian@hammerle.me>
 #
@@ -19,7 +19,7 @@ import datetime
 
 import pytest
 
-import ics2vdir
+import ical2vdir
 
 _CEST = datetime.timezone(datetime.timedelta(hours=+2))
 
@@ -36,4 +36,4 @@ _CEST = datetime.timezone(datetime.timedelta(hours=+2))
 )
 def test__datetime_basic_isoformat(dt_obj, expected_str):
     # pylint: disable=protected-access
-    assert ics2vdir._datetime_basic_isoformat(dt_obj) == expected_str
+    assert ical2vdir._datetime_basic_isoformat(dt_obj) == expected_str

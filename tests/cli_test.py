@@ -1,3 +1,20 @@
+# ical2vdir - convert .ics file to vdir directory
+#
+# Copyright (C) 2020 Fabian Peter Hammerle <fabian@hammerle.me>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 import io
 import logging
 import pathlib
@@ -6,13 +23,13 @@ import unittest.mock
 
 import icalendar
 
-import ics2vdir
+import ical2vdir
 
 # pylint: disable=protected-access
 
 
 def test_entrypoint_help():
-    subprocess.run(["ics2vdir", "--help"], check=True, stdout=subprocess.PIPE)
+    subprocess.run(["ical2vdir", "--help"], check=True, stdout=subprocess.PIPE)
 
 
 def test__main_create_all(
@@ -21,7 +38,7 @@ def test__main_create_all(
     with unittest.mock.patch("sys.stdin", google_calendar_file):
         with unittest.mock.patch("sys.argv", ["", "--output-dir", str(temp_dir_path)]):
             with caplog.at_level(logging.INFO):
-                ics2vdir._main()
+                ical2vdir._main()
     created_item_paths = sorted(temp_dir_path.iterdir())
     assert [p.name for p in created_item_paths] == [
         "1234567890qwertyuiopasdfgh@google.com.ics",
@@ -45,13 +62,13 @@ def test__main_create_some(
 ):
     with unittest.mock.patch("sys.stdin", google_calendar_file):
         with unittest.mock.patch("sys.argv", ["", "--output-dir", str(temp_dir_path)]):
-            ics2vdir._main()
+            ical2vdir._main()
             temp_dir_path.joinpath(
                 "recurr1234567890qwertyuiop@google.com.20150924T090000+0200.ics"
             ).unlink()
             google_calendar_file.seek(0)
             with caplog.at_level(logging.INFO):
-                ics2vdir._main()
+                ical2vdir._main()
     assert len(caplog.records) == 1
     assert caplog.records[0].message.startswith("creating")
     assert caplog.records[0].message.endswith(
@@ -64,7 +81,7 @@ def test__main_update(
 ):
     with unittest.mock.patch("sys.stdin", google_calendar_file):
         with unittest.mock.patch("sys.argv", ["", "--output-dir", str(temp_dir_path)]):
-            ics2vdir._main()
+            ical2vdir._main()
             temp_dir_path.joinpath(
                 "recurr1234567890qwertyuiop@google.com.20150924T090000+0200.ics"
             ).unlink()
@@ -76,7 +93,7 @@ def test__main_update(
                 updated_file.write(updated_ical)
             google_calendar_file.seek(0)
             with caplog.at_level(logging.INFO):
-                ics2vdir._main()
+                ical2vdir._main()
     assert len(caplog.records) == 2
     log_records = sorted(caplog.records, key=lambda r: r.message)
     assert log_records[0].message.startswith("creating")
@@ -96,7 +113,7 @@ def test__main_update_silent(
         with unittest.mock.patch(
             "sys.argv", ["", "--output-dir", str(temp_dir_path), "--silent"]
         ):
-            ics2vdir._main()
+            ical2vdir._main()
             temp_dir_path.joinpath(
                 "recurr1234567890qwertyuiop@google.com.20150924T090000+0200.ics"
             ).unlink()
@@ -108,7 +125,7 @@ def test__main_update_silent(
                 updated_file.write(updated_ical)
             google_calendar_file.seek(0)
             with caplog.at_level(logging.INFO):
-                ics2vdir._main()
+                ical2vdir._main()
     assert len(caplog.records) == 0
 
 
@@ -119,7 +136,7 @@ def test__main_update_verbose(
         with unittest.mock.patch(
             "sys.argv", ["", "--output-dir", str(temp_dir_path), "--verbose"]
         ):
-            ics2vdir._main()
+            ical2vdir._main()
             temp_dir_path.joinpath(
                 "recurr1234567890qwertyuiop@google.com.20150924T090000+0200.ics"
             ).unlink()
@@ -130,7 +147,7 @@ def test__main_update_verbose(
             with updated_path.open("wb") as updated_file:
                 updated_file.write(updated_ical)
             google_calendar_file.seek(0)
-            ics2vdir._main()
+            ical2vdir._main()
     assert any(
         r.message.endswith("1234567890qwertyuiopasdfgh@google.com.ics is up to date")
         for r in caplog.records
@@ -156,7 +173,7 @@ def test__main_delete(
             "sys.argv", ["", "--output-dir", str(temp_dir_path), "--delete"]
         ):
             with caplog.at_level(logging.INFO):
-                ics2vdir._main()
+                ical2vdir._main()
     assert len(list(temp_dir_path.iterdir())) == 3
     assert not any(p.name == "will-be-deleted.ics" for p in temp_dir_path.iterdir())
     assert caplog.records[-1].message.startswith("removing")
