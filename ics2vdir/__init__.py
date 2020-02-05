@@ -46,7 +46,7 @@ def _event_prop_equal(prop_a, prop_b) -> bool:
     if isinstance(prop_a, (icalendar.prop.vDDDTypes, icalendar.prop.vCategory)):
         # pylint: disable=unidiomatic-typecheck
         return type(prop_a) == type(prop_b) and vars(prop_a) == vars(prop_b)
-    return prop_a == prop_b
+    return prop_a == prop_b and prop_a.params == prop_b.params
 
 
 def _events_equal(event_a: icalendar.cal.Event, event_b: icalendar.cal.Event) -> bool:

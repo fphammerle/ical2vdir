@@ -1,9 +1,18 @@
 import datetime
+import typing
 
 import pytest
 from icalendar.prop import vCalAddress, vDDDLists, vDDDTypes, vInt, vRecur, vText
 
 from ics2vdir import _event_prop_equal
+
+_CEST = datetime.timezone(datetime.timedelta(hours=+2))
+
+
+def _parametrize(obj: typing.Any, params: dict) -> typing.Any:
+    for key, value in params.items():
+        obj.params.__setitem__(key, value)
+    return obj
 
 
 @pytest.mark.parametrize(
@@ -35,6 +44,15 @@ from ics2vdir import _event_prop_equal
                 datetime.datetime(2012, 7, 3, 16, 39, 2, tzinfo=datetime.timezone.utc)
             ),
             True,
+        ),
+        (
+            vDDDTypes(
+                datetime.datetime(2012, 7, 3, 16, 39, 2, tzinfo=datetime.timezone.utc)
+            ),
+            vDDDTypes(datetime.datetime(2012, 7, 3, 18, 39, 2, tzinfo=_CEST)),
+            # logically that should be True
+            # but shouldn't hurt to update the ics file
+            False,
         ),
         (
             vDDDTypes(
@@ -99,6 +117,56 @@ from ics2vdir import _event_prop_equal
                 ]
             ),
             False,
+        ),
+        (
+            vCalAddress("someelse@somewhere.com"),
+            _parametrize(
+                vCalAddress("someelse@somewhere.com"),
+                dict(UTYPE="INDIVIDUAL", PARTSTAT="ACCEPTED"),
+            ),
+            False,
+        ),
+        (
+            _parametrize(
+                vCalAddress("someelse@somewhere.com"),
+                dict(UTYPE="INDIVIDUAL", PARTSTAT="ACCEPTED"),
+            ),
+            _parametrize(
+                vCalAddress("someelse@somewhere.com"),
+                dict(UTYPE="INDIVIDUAL", PARTSTAT="ACCEPTED"),
+            ),
+            True,
+        ),
+        (
+            [
+                vCalAddress("someone@somewhere.com",),
+                vCalAddress("someelse@somewhere.com"),
+            ],
+            [
+                vCalAddress("someone@somewhere.com",),
+                _parametrize(
+                    vCalAddress("someelse@somewhere.com"),
+                    dict(UTYPE="INDIVIDUAL", PARTSTAT="ACCEPTED"),
+                ),
+            ],
+            False,
+        ),
+        (
+            [
+                vCalAddress("someone@somewhere.com",),
+                _parametrize(
+                    vCalAddress("someelse@somewhere.com"),
+                    dict(UTYPE="INDIVIDUAL", PARTSTAT="ACCEPTED"),
+                ),
+            ],
+            [
+                vCalAddress("someone@somewhere.com",),
+                _parametrize(
+                    vCalAddress("someelse@somewhere.com"),
+                    dict(UTYPE="INDIVIDUAL", PARTSTAT="ACCEPTED"),
+                ),
+            ],
+            True,
         ),
     ],
 )
