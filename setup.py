@@ -30,7 +30,7 @@ setuptools.setup(
     author_email="fabian@hammerle.me",
     url="https://github.com/fphammerle/ical2vdir",
     license="GPLv3+",
-    keywords=["calendar", "event", "iCalendar", "ics", "sync", "vdir",],
+    keywords=["calendar", "event", "iCal", "iCalendar", "ics", "split", "sync", "vdir"],
     classifiers=[
         "Development Status :: 3 - Alpha",
         "Intended Audience :: End Users/Desktop",
