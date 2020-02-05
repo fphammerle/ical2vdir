@@ -27,6 +27,8 @@ import icalendar
 
 _LOGGER = logging.getLogger(__name__)
 
+_VDIR_EVENT_FILE_EXTENSION = ".ics"
+
 
 def _event_prop_equal(prop_a, prop_b) -> bool:
     if isinstance(prop_a, list):
@@ -77,11 +79,15 @@ def _event_vdir_filename(event: icalendar.cal.Event) -> str:
         assert isinstance(recurrence_id.dt, datetime.datetime), recurrence_id.dt
 
         output_filename += "." + _datetime_basic_isoformat(recurrence_id.dt)
-    return output_filename + ".ics"
+    return output_filename + _VDIR_EVENT_FILE_EXTENSION
 
 
-def _export_event(event: icalendar.cal.Event, output_dir_path: pathlib.Path) -> None:
-    temp_fd, temp_path = tempfile.mkstemp(prefix="ics2vdir-", suffix=".ics")
+def _export_event(
+    event: icalendar.cal.Event, output_dir_path: pathlib.Path
+) -> pathlib.Path:
+    temp_fd, temp_path = tempfile.mkstemp(
+        prefix="ics2vdir-", suffix=_VDIR_EVENT_FILE_EXTENSION
+    )
     os.write(temp_fd, event.to_ical())
     os.close(temp_fd)
     output_path = output_dir_path.joinpath(_event_vdir_filename(event))
@@ -96,6 +102,7 @@ def _export_event(event: icalendar.cal.Event, output_dir_path: pathlib.Path) -> 
         else:
             _LOGGER.info("updating %s", output_path)
             os.rename(temp_path, output_path)
+    return output_path
 
 
 def _main():
@@ -120,6 +127,11 @@ def _main():
         help="Path to output directory (default: current workings dir)",
     )
     argparser.add_argument(
+        "--delete",
+        action="store_true",
+        help="Delete events not in input from output directory.",
+    )
+    argparser.add_argument(
         "-s",
         "--silent",
         "-q",
@@ -137,8 +149,24 @@ def _main():
         logging.getLogger().setLevel(level=logging.WARNING)
     calendar = icalendar.Calendar.from_ical(sys.stdin.read())
     _LOGGER.debug("%d subcomponents", len(calendar.subcomponents))
+    extra_paths = set(
+        path
+        for path in args.output_dir_path.iterdir()
+        if path.is_file() and path.name.endswith(_VDIR_EVENT_FILE_EXTENSION)
+    )
     for component in calendar.subcomponents:
         if isinstance(component, icalendar.cal.Event):
-            _export_event(event=component, output_dir_path=args.output_dir_path)
+            extra_paths.discard(
+                _export_event(event=component, output_dir_path=args.output_dir_path)
+            )
         else:
             _LOGGER.debug("%s", component)
+    _LOGGER.debug(
+        "%d pre-existing items not in input: %s",
+        len(extra_paths),
+        ", ".join(p.name for p in extra_paths),
+    )
+    if args.delete:
+        for path in extra_paths:
+            _LOGGER.info("removing %s", path)
+            path.unlink()
