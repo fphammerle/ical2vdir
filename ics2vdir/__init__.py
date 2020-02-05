@@ -99,10 +99,10 @@ def _export_event(event: icalendar.cal.Event, output_dir_path: pathlib.Path) -> 
 
 
 def _main():
+    # https://docs.python.org/3/library/logging.html#levels
     logging.basicConfig(
         format="%(message)s",
         # datefmt='%Y-%m-%dT%H:%M:%S%z',
-        # level=logging.DEBUG,
         level=logging.INFO,
     )
     argparser = argparse.ArgumentParser(
@@ -119,7 +119,22 @@ def _main():
         dest="output_dir_path",
         help="Path to output directory (default: current workings dir)",
     )
+    argparser.add_argument(
+        "-s",
+        "--silent",
+        "-q",
+        "--quiet",
+        action="store_true",
+        help="Reduce verbosity.",
+    )
+    argparser.add_argument(
+        "-v", "--verbose", action="store_true", help="Increase verbosity",
+    )
     args = argparser.parse_args()
+    if args.verbose:
+        logging.getLogger().setLevel(level=logging.DEBUG)
+    elif args.silent:
+        logging.getLogger().setLevel(level=logging.WARNING)
     calendar = icalendar.Calendar.from_ical(sys.stdin.read())
     _LOGGER.debug("%d subcomponents", len(calendar.subcomponents))
     for component in calendar.subcomponents:
