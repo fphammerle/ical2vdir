@@ -33,3 +33,4 @@ jobs:
     - run: pipenv graph
     - run: pipenv run pylint ical2vdir
     - run: pipenv run pytest --cov=ical2vdir --cov-report=term-missing --cov-fail-under=100
+    - run: pipenv run black --check .
