@@ -10,6 +10,8 @@ Convert / split single [iCalendar](https://en.wikipedia.org/wiki/ICalendar)
 `.ics` file into a
 [vdir](https://vdirsyncer.readthedocs.io/en/stable/vdir.html) directory.
 
+Pre-existing files will be updated or left unchanged.
+
 Compatible with [khal](https://github.com/pimutils/khal).
 
 ## Setup
