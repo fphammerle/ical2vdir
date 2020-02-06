@@ -32,5 +32,7 @@ jobs:
            fi
     - run: pipenv graph
     - run: pipenv run pylint ical2vdir
+    # https://github.com/PyCQA/pylint/issues/352
+    - run: pipenv run pylint --disable=missing-requirement tests/*
     - run: pipenv run pytest --cov=ical2vdir --cov-report=term-missing --cov-fail-under=100
     - run: pipenv run black --check .
