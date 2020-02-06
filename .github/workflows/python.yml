@@ -21,6 +21,11 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - run: pip install --upgrade pipenv>=2018.10.9
     - run: pipenv sync --dev
+    # ModuleNotFoundError: No module named 'importlib_metadata'
+    - run: if python3 -c 'import sys; sys.exit(sys.version_info < (3, 8))'; then
+           pipenv graph;
+           pipenv install --dev importlib-metadata;
+           fi
     - run: pipenv graph
     - run: pipenv run pylint ical2vdir
     - run: pipenv run pytest --cov=ical2vdir --cov-report=term-missing --cov-fail-under=100
