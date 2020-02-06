@@ -1,3 +1,7 @@
+# show in badge
+# https://help.github.com/en/actions/automating-your-workflow-with-github-actions/configuring-a-workflow#adding-a-workflow-status-badge-to-your-repository
+name: tests
+
 on:
   push:
   pull_request:

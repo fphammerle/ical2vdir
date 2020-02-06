@@ -1,6 +1,7 @@
 # ical2vdir 📅
 
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![CI Pipeline Status](https://github.com/fphammerle/ical2vdir/workflows/tests/badge.svg)](https://github.com/fphammerle/ical2vdir/actions)
 [![Last Release](https://img.shields.io/pypi/v/ical2vdir.svg)](https://pypi.org/project/ical2vdir/#history)
 
 Convert / split single [iCalendar](https://en.wikipedia.org/wiki/ICalendar)
