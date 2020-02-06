@@ -16,7 +16,9 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import copy
+import os
 import pathlib
+import unittest.mock
 
 import icalendar.cal
 import pytest
@@ -47,6 +49,16 @@ END:VEVENT
 )
 
 # pylint: disable=protected-access
+
+
+def test__write_event_cleanup(tmpdir):
+    event = icalendar.cal.Event.from_ical(_SINGLE_EVENT_ICAL)
+    with unittest.mock.patch("os.unlink") as unlink_mock:
+        with pytest.raises(IsADirectoryError):
+            ical2vdir._write_event(event, pathlib.Path(tmpdir))
+    unlink_mock.assert_called_once()
+    unlink_args, _ = unlink_mock.call_args
+    os.unlink(unlink_args[0])
 
 
 @pytest.mark.parametrize(
