@@ -80,22 +80,22 @@ def test__event_vdir_filename(event_ical, expected_filename):
 
 
 @pytest.mark.parametrize("event_ical", [_SINGLE_EVENT_ICAL])
-def test__export_event_create(tmpdir, event_ical):
+def test__sync_event_create(tmpdir, event_ical):
     temp_path = pathlib.Path(tmpdir)
     event = icalendar.cal.Event.from_ical(event_ical)
-    ical2vdir._export_event(event, temp_path)
+    ical2vdir._sync_event(event, temp_path)
     (ics_path,) = temp_path.iterdir()
     assert ics_path.name == "1qa2ws3ed4rf5tg@google.com.ics"
     assert ics_path.read_bytes() == _SINGLE_EVENT_ICAL
 
 
 @pytest.mark.parametrize("event_ical", [_SINGLE_EVENT_ICAL])
-def test__export_event_update(tmpdir, event_ical):
+def test__sync_event_update(tmpdir, event_ical):
     temp_path = pathlib.Path(tmpdir)
     event = icalendar.cal.Event.from_ical(event_ical)
-    ical2vdir._export_event(event, temp_path)
+    ical2vdir._sync_event(event, temp_path)
     event["SUMMARY"] += " suffix"
-    ical2vdir._export_event(event, temp_path)
+    ical2vdir._sync_event(event, temp_path)
     (ics_path,) = temp_path.iterdir()
     assert ics_path.name == event["UID"] + ".ics"
     assert ics_path.read_bytes() == _SINGLE_EVENT_ICAL.replace(
@@ -104,12 +104,12 @@ def test__export_event_update(tmpdir, event_ical):
 
 
 @pytest.mark.parametrize("event_ical", [_SINGLE_EVENT_ICAL])
-def test__export_event_unchanged(tmpdir, event_ical):
+def test__sync_event_unchanged(tmpdir, event_ical):
     temp_path = pathlib.Path(tmpdir)
     event = icalendar.cal.Event.from_ical(event_ical)
-    ical2vdir._export_event(event, temp_path)
+    ical2vdir._sync_event(event, temp_path)
     (ics_path,) = temp_path.iterdir()
     old_stat = copy.deepcopy(ics_path.stat())
-    ical2vdir._export_event(event, temp_path)
+    ical2vdir._sync_event(event, temp_path)
     assert ics_path.stat() == old_stat
     assert ics_path.read_bytes() == _SINGLE_EVENT_ICAL
