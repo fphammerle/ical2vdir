@@ -37,14 +37,3 @@ Remove files from output directory that are not available in input:
 ```sh
 $ ical2vdir < input.ics --output-dir /some/path --delete
 ```
-
-### Run Tests
-
-```sh
-$ git clone https://github.com/fphammerle/ical2vdir.git
-$ cd ical2vdir
-$ pipenv sync --dev
-$ pipenv run pylint ical2vdir
-$ pipenv run mypy ical2vdir
-$ pipenv run pytest --cov=ical2vdir --cov-report=term-missing --cov-fail-under=100
-```
