@@ -39,3 +39,7 @@ jobs:
     - run: pipenv run pylint --disable=missing-requirement --disable=parse-error tests/*
     - run: pipenv run pytest --cov=ical2vdir --cov-report=term-missing --cov-fail-under=100
     - run: pipenv run black --check .
+    - uses: coverallsapp/github-action@v1.0.1
+      with:
+        path-to-lcov: ./.coverage
+        github-token: ${{ secrets.GITHUB_TOKEN }}
