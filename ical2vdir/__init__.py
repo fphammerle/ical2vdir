@@ -16,12 +16,14 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import argparse
+import contextlib
 import datetime
 import logging
 import os
 import pathlib
 import sys
 import tempfile
+import typing
 
 import icalendar
 
@@ -86,27 +88,37 @@ def _event_vdir_filename(event: icalendar.cal.Event) -> str:
     return output_filename + _VDIR_EVENT_FILE_EXTENSION
 
 
-def _export_event(
-    event: icalendar.cal.Event, output_dir_path: pathlib.Path
-) -> pathlib.Path:
+@contextlib.contextmanager
+def _temp_vdir_item() -> typing.Iterator[typing.Tuple[int, str]]:
     temp_fd, temp_path = tempfile.mkstemp(
         prefix="ical2vdir-", suffix=_VDIR_EVENT_FILE_EXTENSION
     )
-    os.write(temp_fd, event.to_ical())
-    os.close(temp_fd)
-    output_path = output_dir_path.joinpath(_event_vdir_filename(event))
-    if not output_path.exists():
-        _LOGGER.info("creating %s", output_path)
-        os.rename(temp_path, output_path)
-    else:
-        with open(output_path, "rb") as current_file:
-            current_event = icalendar.Event.from_ical(current_file.read())
-        if _events_equal(event, current_event):
-            _LOGGER.debug("%s is up to date", output_path)
-        else:
-            _LOGGER.info("updating %s", output_path)
+    try:
+        yield (temp_fd, temp_path)
+    finally:
+        if os.path.exists(temp_path):
+            os.unlink(temp_path)
+
+
+def _export_event(
+    event: icalendar.cal.Event, output_dir_path: pathlib.Path
+) -> pathlib.Path:
+    with _temp_vdir_item() as (temp_fd, temp_path):
+        os.write(temp_fd, event.to_ical())
+        os.close(temp_fd)
+        output_path = output_dir_path.joinpath(_event_vdir_filename(event))
+        if not output_path.exists():
+            _LOGGER.info("creating %s", output_path)
             os.rename(temp_path, output_path)
-    return output_path
+        else:
+            with open(output_path, "rb") as current_file:
+                current_event = icalendar.Event.from_ical(current_file.read())
+            if _events_equal(event, current_event):
+                _LOGGER.debug("%s is up to date", output_path)
+            else:
+                _LOGGER.info("updating %s", output_path)
+                os.rename(temp_path, output_path)
+        return output_path
 
 
 def _main():
