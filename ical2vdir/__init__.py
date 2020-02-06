@@ -93,6 +93,9 @@ def _write_event(event: icalendar.cal.Event, path: pathlib.Path):
         prefix="ical2vdir-", suffix=_VDIR_EVENT_FILE_EXTENSION
     )
     try:
+        # > Content lines are delimited by a line break,
+        # > which is a CRLF sequence [...]
+        # https://tools.ietf.org/html/rfc5545#section-3.1
         os.write(temp_fd, event.to_ical())
         os.close(temp_fd)
         os.rename(temp_path, path)
