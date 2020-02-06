@@ -39,7 +39,9 @@ jobs:
     - run: pipenv run pylint --disable=missing-requirement --disable=parse-error tests/*
     - run: pipenv run pytest --cov=ical2vdir --cov-report=term-missing --cov-fail-under=100
     - run: pipenv run black --check .
+    # https://github.com/coverallsapp/github-action/issues/30
+    # https://github.com/coverallsapp/github-action/issues/4#issuecomment-529399410
     - run: pip install 'coveralls<2'
     - run: coveralls
       env:
-        COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
