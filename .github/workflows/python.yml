@@ -26,6 +26,7 @@ jobs:
     - run: pip install --upgrade pipenv>=2018.10.9
     - run: pipenv sync --dev
     # ModuleNotFoundError: No module named 'importlib_metadata'
+    # https://github.com/WanzenBug/pylint-import-requirements/issues/17
     - run: if python3 -c 'import sys; sys.exit(sys.version_info < (3, 8))'; then
            pipenv graph;
            pipenv install --dev importlib-metadata;
