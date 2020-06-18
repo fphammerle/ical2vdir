@@ -33,13 +33,13 @@ def test_entrypoint_help():
 
 
 def test__main_create_all(
-    caplog, temp_dir_path: pathlib.Path, google_calendar_file: io.BufferedReader
+    caplog, tmp_path: pathlib.Path, google_calendar_file: io.BufferedReader
 ):
     with unittest.mock.patch("sys.stdin", google_calendar_file):
-        with unittest.mock.patch("sys.argv", ["", "--output-dir", str(temp_dir_path)]):
+        with unittest.mock.patch("sys.argv", ["", "--output-dir", str(tmp_path)]):
             with caplog.at_level(logging.INFO):
                 ical2vdir._main()
-    created_item_paths = sorted(temp_dir_path.iterdir())
+    created_item_paths = sorted(tmp_path.iterdir())
     assert [p.name for p in created_item_paths] == [
         "1234567890qwertyuiopasdfgh@google.com.ics",
         "recurr1234567890qwertyuiop@google.com.20150908T090000+0200.ics",
@@ -58,12 +58,12 @@ def test__main_create_all(
 
 
 def test__main_create_some(
-    caplog, temp_dir_path: pathlib.Path, google_calendar_file: io.BufferedReader
+    caplog, tmp_path: pathlib.Path, google_calendar_file: io.BufferedReader
 ):
     with unittest.mock.patch("sys.stdin", google_calendar_file):
-        with unittest.mock.patch("sys.argv", ["", "--output-dir", str(temp_dir_path)]):
+        with unittest.mock.patch("sys.argv", ["", "--output-dir", str(tmp_path)]):
             ical2vdir._main()
-            temp_dir_path.joinpath(
+            tmp_path.joinpath(
                 "recurr1234567890qwertyuiop@google.com.20150924T090000+0200.ics"
             ).unlink()
             google_calendar_file.seek(0)
@@ -77,15 +77,15 @@ def test__main_create_some(
 
 
 def test__main_update(
-    caplog, temp_dir_path: pathlib.Path, google_calendar_file: io.BufferedReader
+    caplog, tmp_path: pathlib.Path, google_calendar_file: io.BufferedReader
 ):
     with unittest.mock.patch("sys.stdin", google_calendar_file):
-        with unittest.mock.patch("sys.argv", ["", "--output-dir", str(temp_dir_path)]):
+        with unittest.mock.patch("sys.argv", ["", "--output-dir", str(tmp_path)]):
             ical2vdir._main()
-            temp_dir_path.joinpath(
+            tmp_path.joinpath(
                 "recurr1234567890qwertyuiop@google.com.20150924T090000+0200.ics"
             ).unlink()
-            updated_path = temp_dir_path.joinpath(
+            updated_path = tmp_path.joinpath(
                 "recurr1234567890qwertyuiop@google.com.20150908T090000+0200.ics"
             )
             updated_ical = updated_path.read_bytes().replace(b"20150908", b"20140703")
@@ -107,17 +107,17 @@ def test__main_update(
 
 
 def test__main_update_silent(
-    caplog, temp_dir_path: pathlib.Path, google_calendar_file: io.BufferedReader
+    caplog, tmp_path: pathlib.Path, google_calendar_file: io.BufferedReader
 ):
     with unittest.mock.patch("sys.stdin", google_calendar_file):
         with unittest.mock.patch(
-            "sys.argv", ["", "--output-dir", str(temp_dir_path), "--silent"]
+            "sys.argv", ["", "--output-dir", str(tmp_path), "--silent"]
         ):
             ical2vdir._main()
-            temp_dir_path.joinpath(
+            tmp_path.joinpath(
                 "recurr1234567890qwertyuiop@google.com.20150924T090000+0200.ics"
             ).unlink()
-            updated_path = temp_dir_path.joinpath(
+            updated_path = tmp_path.joinpath(
                 "recurr1234567890qwertyuiop@google.com.20150908T090000+0200.ics"
             )
             updated_ical = updated_path.read_bytes().replace(b"20150908", b"20140703")
@@ -130,17 +130,17 @@ def test__main_update_silent(
 
 
 def test__main_update_verbose(
-    caplog, temp_dir_path: pathlib.Path, google_calendar_file: io.BufferedReader
+    caplog, tmp_path: pathlib.Path, google_calendar_file: io.BufferedReader
 ):
     with unittest.mock.patch("sys.stdin", google_calendar_file):
         with unittest.mock.patch(
-            "sys.argv", ["", "--output-dir", str(temp_dir_path), "--verbose"]
+            "sys.argv", ["", "--output-dir", str(tmp_path), "--verbose"]
         ):
             ical2vdir._main()
-            temp_dir_path.joinpath(
+            tmp_path.joinpath(
                 "recurr1234567890qwertyuiop@google.com.20150924T090000+0200.ics"
             ).unlink()
-            updated_path = temp_dir_path.joinpath(
+            updated_path = tmp_path.joinpath(
                 "recurr1234567890qwertyuiop@google.com.20150908T090000+0200.ics"
             )
             updated_ical = updated_path.read_bytes().replace(b"20150908", b"20140703")
@@ -165,16 +165,16 @@ def test__main_update_verbose(
 
 
 def test__main_delete(
-    caplog, temp_dir_path: pathlib.Path, google_calendar_file: io.BufferedReader
+    caplog, tmp_path: pathlib.Path, google_calendar_file: io.BufferedReader
 ):
-    temp_dir_path.joinpath("will-be-deleted.ics").touch()
+    tmp_path.joinpath("will-be-deleted.ics").touch()
     with unittest.mock.patch("sys.stdin", google_calendar_file):
         with unittest.mock.patch(
-            "sys.argv", ["", "--output-dir", str(temp_dir_path), "--delete"]
+            "sys.argv", ["", "--output-dir", str(tmp_path), "--delete"]
         ):
             with caplog.at_level(logging.INFO):
                 ical2vdir._main()
-    assert len(list(temp_dir_path.iterdir())) == 3
-    assert not any(p.name == "will-be-deleted.ics" for p in temp_dir_path.iterdir())
+    assert len(list(tmp_path.iterdir())) == 3
+    assert not any(p.name == "will-be-deleted.ics" for p in tmp_path.iterdir())
     assert caplog.records[-1].message.startswith("removing")
     assert caplog.records[-1].message.endswith("will-be-deleted.ics")

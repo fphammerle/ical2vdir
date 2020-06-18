@@ -98,7 +98,8 @@ def _write_event(event: icalendar.cal.Event, path: pathlib.Path):
         # https://tools.ietf.org/html/rfc5545#section-3.1
         os.write(temp_fd, event.to_ical())
         os.close(temp_fd)
-        os.rename(temp_path, path)
+        # python3.5 expects Union[bytes, str]
+        os.rename(temp_path, str(path))
     finally:
         if os.path.exists(temp_path):
             os.unlink(temp_path)
@@ -112,7 +113,7 @@ def _sync_event(
         _LOGGER.info("creating %s", output_path)
         _write_event(event, output_path)
     else:
-        with open(output_path, "rb") as current_file:
+        with output_path.open("rb") as current_file:
             current_event = icalendar.Event.from_ical(current_file.read())
         if _events_equal(event, current_event):
             _LOGGER.debug("%s is up to date", output_path)
