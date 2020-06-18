@@ -24,7 +24,9 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
     - run: pip install --upgrade pipenv>=2018.10.9
-    - run: pipenv install --deploy --dev
+    - run: pipenv install --python "$PYTHON_VERSION" --deploy --dev
+      env:
+        PYTHON_VERSION: ${{ matrix.python-version }}
     # ModuleNotFoundError: No module named 'importlib_metadata'
     # https://github.com/WanzenBug/pylint-import-requirements/issues/17
     - run: if python3 -c 'import sys; sys.exit(sys.version_info < (3, 8))'; then
