@@ -98,7 +98,8 @@ def _write_event(event: icalendar.cal.Event, path: pathlib.Path):
         # https://tools.ietf.org/html/rfc5545#section-3.1
         os.write(temp_fd, event.to_ical())
         os.close(temp_fd)
-        os.rename(temp_path, path)
+        # python3.5 expects Union[bytes, str]
+        os.rename(temp_path, str(path))
     finally:
         if os.path.exists(temp_path):
             os.unlink(temp_path)
