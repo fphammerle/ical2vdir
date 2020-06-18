@@ -19,11 +19,14 @@ jobs:
         - 3.8
     steps:
     - uses: actions/checkout@v1
-    - uses: actions/setup-python@v1
+    - &setup_python
+      uses: actions/setup-python@v1
       with:
         python-version: ${{ matrix.python-version }}
-    - run: pip install --upgrade pipenv>=2018.10.9
-    - run: pipenv install --python "$PYTHON_VERSION" --deploy --dev
+    - &pip_install_pipenv
+      run: pip install --upgrade pipenv>=2018.10.9
+    - &pipenv_install
+      run: pipenv install --python "$PYTHON_VERSION" --deploy --dev
       env:
         PYTHON_VERSION: ${{ matrix.python-version }}
     - run: pipenv graph
@@ -39,13 +42,9 @@ jobs:
         - 3.8
     steps:
     - uses: actions/checkout@v1
-    - uses: actions/setup-python@v1
-      with:
-        python-version: ${{ matrix.python-version }}
-    - run: pip install --upgrade pipenv>=2018.10.9
-    - run: pipenv install --python "$PYTHON_VERSION" --deploy --dev
-      env:
-        PYTHON_VERSION: ${{ matrix.python-version }}
+    - *setup_python
+    - *pip_install_pipenv
+    - *pipenv_install
     - run: pipenv graph
     - run: pipenv run pytest --cov=ical2vdir --cov-report=term-missing --cov-fail-under=100
     - run: pipenv run pylint --load-plugins=pylint_import_requirements ical2vdir
