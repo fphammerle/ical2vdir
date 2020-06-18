@@ -7,14 +7,18 @@ on:
 jobs:
   build:
     runs-on: ubuntu-18.04
+    strategy:
+      matrix:
+        python-version:
+        - 3.8
     steps:
     - uses: actions/checkout@v1
     - uses: actions/setup-python@v1
       with:
-        # black requires python>=3.6
-        # https://github.com/psf/black/commit/e74117f172e29e8a980e2c9de929ad50d3769150#diff-2eeaed663bd0d25b7e608891384b7298R51
-        python-version: 3.8
-    - run: python --version
-    - run: pip install --upgrade black==19.10b0
-    - run: pip freeze
-    - run: black --check .
+        python-version: ${{ matrix.python-version }}
+    - run: pip install --upgrade pipenv>=2018.10.9
+    - run: pipenv install --python "$PYTHON_VERSION" --deploy --dev
+      env:
+        PYTHON_VERSION: ${{ matrix.python-version }}
+    - run: pipenv graph
+    - run: pipenv run black --check .
