@@ -113,7 +113,7 @@ def _sync_event(
         _LOGGER.info("creating %s", output_path)
         _write_event(event, output_path)
     else:
-        with open(output_path, "rb") as current_file:
+        with output_path.open("rb") as current_file:
             current_event = icalendar.Event.from_ical(current_file.read())
         if _events_equal(event, current_event):
             _LOGGER.debug("%s is up to date", output_path)
