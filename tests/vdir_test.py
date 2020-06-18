@@ -50,12 +50,14 @@ END:VEVENT
 
 # pylint: disable=protected-access
 
+# tmp_path fixture: https://github.com/pytest-dev/pytest/blob/5.4.3/src/_pytest/tmpdir.py#L191
 
-def test__write_event_cleanup(tmpdir):
+
+def test__write_event_cleanup(tmp_path: pathlib.Path):
     event = icalendar.cal.Event.from_ical(_SINGLE_EVENT_ICAL)
     with unittest.mock.patch("os.unlink") as unlink_mock:
         with pytest.raises(IsADirectoryError):
-            ical2vdir._write_event(event, pathlib.Path(tmpdir))
+            ical2vdir._write_event(event, tmp_path)
     unlink_mock.assert_called_once()
     unlink_args, _ = unlink_mock.call_args
     os.unlink(unlink_args[0])
@@ -92,23 +94,21 @@ def test__event_vdir_filename(event_ical, expected_filename):
 
 
 @pytest.mark.parametrize("event_ical", [_SINGLE_EVENT_ICAL])
-def test__sync_event_create(tmpdir, event_ical):
-    temp_path = pathlib.Path(tmpdir)
+def test__sync_event_create(tmp_path: pathlib.Path, event_ical):
     event = icalendar.cal.Event.from_ical(event_ical)
-    ical2vdir._sync_event(event, temp_path)
-    (ics_path,) = temp_path.iterdir()
+    ical2vdir._sync_event(event, tmp_path)
+    (ics_path,) = tmp_path.iterdir()
     assert ics_path.name == "1qa2ws3ed4rf5tg@google.com.ics"
     assert ics_path.read_bytes() == _SINGLE_EVENT_ICAL
 
 
 @pytest.mark.parametrize("event_ical", [_SINGLE_EVENT_ICAL])
-def test__sync_event_update(tmpdir, event_ical):
-    temp_path = pathlib.Path(tmpdir)
+def test__sync_event_update(tmp_path: pathlib.Path, event_ical):
     event = icalendar.cal.Event.from_ical(event_ical)
-    ical2vdir._sync_event(event, temp_path)
+    ical2vdir._sync_event(event, tmp_path)
     event["SUMMARY"] += " suffix"
-    ical2vdir._sync_event(event, temp_path)
-    (ics_path,) = temp_path.iterdir()
+    ical2vdir._sync_event(event, tmp_path)
+    (ics_path,) = tmp_path.iterdir()
     assert ics_path.name == event["UID"] + ".ics"
     assert ics_path.read_bytes() == _SINGLE_EVENT_ICAL.replace(
         b"party", b"party suffix"
@@ -116,12 +116,11 @@ def test__sync_event_update(tmpdir, event_ical):
 
 
 @pytest.mark.parametrize("event_ical", [_SINGLE_EVENT_ICAL])
-def test__sync_event_unchanged(tmpdir, event_ical):
-    temp_path = pathlib.Path(tmpdir)
+def test__sync_event_unchanged(tmp_path: pathlib.Path, event_ical):
     event = icalendar.cal.Event.from_ical(event_ical)
-    ical2vdir._sync_event(event, temp_path)
-    (ics_path,) = temp_path.iterdir()
+    ical2vdir._sync_event(event, tmp_path)
+    (ics_path,) = tmp_path.iterdir()
     old_stat = copy.deepcopy(ics_path.stat())
-    ical2vdir._sync_event(event, temp_path)
+    ical2vdir._sync_event(event, tmp_path)
     assert ics_path.stat() == old_stat
     assert ics_path.read_bytes() == _SINGLE_EVENT_ICAL
