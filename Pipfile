@@ -9,6 +9,8 @@ ical2vdir = {editable = true,path = "."}
 # https://github.com/psf/black/commit/e74117f172e29e8a980e2c9de929ad50d3769150#diff-2eeaed663bd0d25b7e608891384b7298R51
 #black = "==19.10b0"
 mypy = "*"
+# workaround https://github.com/pytest-dev/pytest/issues/3953
+pathlib2 = {version = "*", markers="python_version < '3.6'"}
 pylint = "*"
 pylint-import-requirements = "*"
 pytest = "*"
@@ -19,3 +21,5 @@ zipp = "<2"
 
 [requires]
 python_version = "3"
+
+# Pipfile syntax: https://github.com/pypa/pipfile#pipfile
