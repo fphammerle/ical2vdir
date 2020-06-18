@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `TypeError` in `_write_event` when renaming temporary file
   - `TypeError` in `_sync_event` when reading file
   - tests: `TypeError` when converting to `pathlib.Path`
+  - tests: `AttributeError` due to unavailable `MagicMock.assert_called_once`
 
 ## [0.1.1] - 2020-02-06
 ### Fixed
