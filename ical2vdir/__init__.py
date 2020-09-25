@@ -60,7 +60,11 @@ def _events_equal(event_a: icalendar.cal.Event, event_b: icalendar.cal.Event) ->
             return False
         if not _event_prop_equal(prop_a, prop_b):
             _LOGGER.debug(
-                "%s/%s: %r != %r", event_a["UID"], key, prop_a, prop_b,
+                "%s/%s: %r != %r",
+                event_a["UID"],
+                key,
+                prop_a,
+                prop_b,
             )
             return False
     return True
@@ -158,7 +162,10 @@ def _main():
         help="Reduce verbosity.",
     )
     argparser.add_argument(
-        "-v", "--verbose", action="store_true", help="Increase verbosity",
+        "-v",
+        "--verbose",
+        action="store_true",
+        help="Increase verbosity",
     )
     args = argparser.parse_args()
     if args.verbose:

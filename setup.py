@@ -48,7 +48,11 @@ setuptools.setup(
         "Programming Language :: Python :: 3.8",
         "Topic :: Utilities",
     ],
-    entry_points={"console_scripts": ["ical2vdir = ical2vdir:_main",]},
+    entry_points={
+        "console_scripts": [
+            "ical2vdir = ical2vdir:_main",
+        ]
+    },
     install_requires=["icalendar>=4,<5"],
     setup_requires=["setuptools_scm"],
     tests_require=["pytest"],

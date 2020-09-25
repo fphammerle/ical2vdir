@@ -67,7 +67,10 @@ def test__write_event_cleanup(tmp_path: pathlib.Path):
 @pytest.mark.parametrize(
     ("event_ical", "expected_filename"),
     [
-        (_SINGLE_EVENT_ICAL, "1qa2ws3ed4rf5tg@google.com.ics",),
+        (
+            _SINGLE_EVENT_ICAL,
+            "1qa2ws3ed4rf5tg@google.com.ics",
+        ),
         (
             b"""BEGIN:VEVENT
 SUMMARY:work

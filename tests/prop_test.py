@@ -51,8 +51,16 @@ def _parametrize(obj: typing.Any, params: dict) -> typing.Any:
             vCalAddress("mailto:someelse@somewhere.com"),
             False,
         ),
-        (vRecur(FREQ="WEEKLY", COUNT=21), vRecur(FREQ="WEEKLY", COUNT=21), True,),
-        (vRecur(FREQ="WEEKLY", COUNT=21), vRecur(FREQ="WEEKLY", COUNT=42), False,),
+        (
+            vRecur(FREQ="WEEKLY", COUNT=21),
+            vRecur(FREQ="WEEKLY", COUNT=21),
+            True,
+        ),
+        (
+            vRecur(FREQ="WEEKLY", COUNT=21),
+            vRecur(FREQ="WEEKLY", COUNT=42),
+            False,
+        ),
         (
             vDDDTypes(
                 datetime.datetime(2012, 7, 3, 16, 39, 2, tzinfo=datetime.timezone.utc)
@@ -156,11 +164,15 @@ def _parametrize(obj: typing.Any, params: dict) -> typing.Any:
         ),
         (
             [
-                vCalAddress("someone@somewhere.com",),
+                vCalAddress(
+                    "someone@somewhere.com",
+                ),
                 vCalAddress("someelse@somewhere.com"),
             ],
             [
-                vCalAddress("someone@somewhere.com",),
+                vCalAddress(
+                    "someone@somewhere.com",
+                ),
                 _parametrize(
                     vCalAddress("someelse@somewhere.com"),
                     dict(UTYPE="INDIVIDUAL", PARTSTAT="ACCEPTED"),
@@ -170,14 +182,18 @@ def _parametrize(obj: typing.Any, params: dict) -> typing.Any:
         ),
         (
             [
-                vCalAddress("someone@somewhere.com",),
+                vCalAddress(
+                    "someone@somewhere.com",
+                ),
                 _parametrize(
                     vCalAddress("someelse@somewhere.com"),
                     dict(UTYPE="INDIVIDUAL", PARTSTAT="ACCEPTED"),
                 ),
             ],
             [
-                vCalAddress("someone@somewhere.com",),
+                vCalAddress(
+                    "someone@somewhere.com",
+                ),
                 _parametrize(
                     vCalAddress("someelse@somewhere.com"),
                     dict(UTYPE="INDIVIDUAL", PARTSTAT="ACCEPTED"),
