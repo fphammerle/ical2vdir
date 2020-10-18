@@ -1,7 +1,9 @@
 version: 2
 
 updates:
-- package-ecosystem: pipenv
+- # > Dependabot also supports the following package managers: [...]
+  # > - pipenv, pip-compile, and poetry (specify pip)
+  package-ecosystem: pip
   directory: /
   schedule:
     interval: weekly
