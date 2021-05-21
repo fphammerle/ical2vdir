@@ -58,8 +58,7 @@ def test__write_event_cleanup(tmp_path: pathlib.Path):
     with unittest.mock.patch("os.unlink") as unlink_mock:
         with pytest.raises(IsADirectoryError):
             ical2vdir._write_event(event, tmp_path)
-    # assert_called_once new in python3.6
-    assert unlink_mock.call_count == 1
+    unlink_mock.assert_called_once()
     unlink_args, _ = unlink_mock.call_args
     os.unlink(unlink_args[0])
 
