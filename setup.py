@@ -36,7 +36,7 @@ setuptools.setup(
     keywords=["calendar", "event", "iCal", "iCalendar", "ics", "split", "sync", "vdir"],
     classifiers=[
         # https://pypi.org/classifiers/
-        "Development Status :: 3 - Alpha",
+        "Development Status :: 4 - Beta",
         "Intended Audience :: End Users/Desktop",
         "Intended Audience :: System Administrators",
         "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
