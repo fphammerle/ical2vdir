@@ -45,7 +45,9 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - run: pip install --upgrade pipenv==2020.8.13
     # by default pipenv picks the latest version in PATH
-    - run: pipenv --python "$(which python)" install --deploy --dev
+    - run: pipenv install --python "$PYTHON_VERSION" --deploy --dev
+      env:
+        PYTHON_VERSION: ${{ matrix.python-version }}
     - run: pipenv graph
     - run: pipenv run pytest --cov="$(cat *.egg-info/top_level.txt)" --cov-report=term-missing --cov-fail-under=100
     - run: pipenv run pylint --load-plugins=pylint_import_requirements "$(cat *.egg-info/top_level.txt)"
