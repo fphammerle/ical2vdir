@@ -16,6 +16,12 @@ pylint-import-requirements = "*"
 pytest = "*"
 pytest-cov = "*"
 
+# python3.10 compatibility
+# >   File "[...]/lib/python3.10/site-packages/mypy/main.py", line 11, in <module>
+# >     from typing_extensions import Final, NoReturn
+# > ModuleNotFoundError: No module named 'typing_extensions'
+typing_extensions = "*"
+
 [requires]
 python_version = "3"
 
