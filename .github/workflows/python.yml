@@ -18,9 +18,13 @@ jobs:
         python-verison: ['3.9']
     steps:
     - uses: actions/checkout@v2.4.0
-    - uses: actions/setup-python@v2.2.2
+    - uses: actions/setup-python@v2.3.0
       with:
         python-version: ${{ matrix.python-version }}
+        # > Post Run actions/setup-python@v2.3.0
+        # > Post job cleanup.
+        # > Error: Unexpected end of JSON input
+        #cache: pipenv
     - run: pip install --upgrade pipenv==2020.8.13
     - run: pipenv install --python "$PYTHON_VERSION" --deploy --dev
       env:
@@ -40,9 +44,14 @@ jobs:
       fail-fast: false
     steps:
     - uses: actions/checkout@v2.4.0
-    - uses: actions/setup-python@v2.2.2
+    - uses: actions/setup-python@v2.3.0
       with:
         python-version: ${{ matrix.python-version }}
+        # > [...] uses its hash as a part of the cache key.
+        # https://github.com/actions/setup-python/tree/v2.3.0#caching-packages-dependencies
+        # > Cache saved with the key: setup-python-Linux-python-3.6.15-pipenv-bae2765561[...]
+        # > Cache saved with the key: setup-python-Linux-python-3.7.12-pipenv-bae2765561[...]
+        cache: pipenv
     - run: pip install --upgrade pipenv==2020.8.13
     # by default pipenv picks the latest version in PATH
     - run: pipenv install --python "$PYTHON_VERSION" --deploy --dev
@@ -73,7 +82,7 @@ jobs:
         python-verison: ['3.9']
     steps:
     - uses: actions/checkout@v2.4.0
-    - uses: actions/setup-python@v2.2.2
+    - uses: actions/setup-python@v2.3.0
       with:
         python-version: ${{ matrix.python-version }}
     - run: pip install --upgrade pipenv==2020.8.13
