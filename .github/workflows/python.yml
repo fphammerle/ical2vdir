@@ -23,7 +23,7 @@ jobs:
         python-version: ${{ matrix.python-version }}
         # did not reduce runtime of `pipenv install` (still approx. 1 min)
         #cache: pipenv
-    - run: pip install --upgrade pipenv==2020.8.13
+    - run: pip install --upgrade pipenv==2021.11.23
     - run: pipenv install --python "$PYTHON_VERSION" --deploy --dev
       env:
         PYTHON_VERSION: ${{ matrix.python-version }}
@@ -47,7 +47,7 @@ jobs:
         python-version: ${{ matrix.python-version }}
         # did not reduce runtime of `pipenv install` (still approx. 1 min)
         #cache: pipenv
-    - run: pip install --upgrade pipenv==2020.8.13
+    - run: pip install --upgrade pipenv==2021.11.23
     # by default pipenv picks the latest version in PATH
     - run: pipenv install --python "$PYTHON_VERSION" --deploy --dev
       env:
@@ -80,7 +80,7 @@ jobs:
     - uses: actions/setup-python@v2.3.1
       with:
         python-version: ${{ matrix.python-version }}
-    - run: pip install --upgrade pipenv==2020.8.13
+    - run: pip install --upgrade pipenv==2021.11.23
     - run: pipenv install --python "$PYTHON_VERSION" --deploy --dev
       env:
         PYTHON_VERSION: ${{ matrix.python-version }}
