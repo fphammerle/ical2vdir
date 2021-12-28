@@ -53,7 +53,7 @@ END:VEVENT
 # tmp_path fixture: https://github.com/pytest-dev/pytest/blob/5.4.3/src/_pytest/tmpdir.py#L191
 
 
-def test__write_event_cleanup(tmp_path: pathlib.Path):
+def test__write_event_cleanup(tmp_path: pathlib.Path) -> None:
     event = icalendar.cal.Event.from_ical(_SINGLE_EVENT_ICAL)
     with unittest.mock.patch("os.unlink") as unlink_mock:
         with pytest.raises(IsADirectoryError):
@@ -91,13 +91,13 @@ END:VEVENT
         ),
     ],
 )
-def test__event_vdir_filename(event_ical, expected_filename):
+def test__event_vdir_filename(event_ical: bytes, expected_filename: str) -> None:
     event = icalendar.cal.Event.from_ical(event_ical)
     assert ical2vdir._event_vdir_filename(event) == expected_filename
 
 
 @pytest.mark.parametrize("event_ical", [_SINGLE_EVENT_ICAL])
-def test__sync_event_create(tmp_path: pathlib.Path, event_ical):
+def test__sync_event_create(tmp_path: pathlib.Path, event_ical: bytes) -> None:
     event = icalendar.cal.Event.from_ical(event_ical)
     ical2vdir._sync_event(event, tmp_path)
     (ics_path,) = tmp_path.iterdir()
@@ -106,7 +106,7 @@ def test__sync_event_create(tmp_path: pathlib.Path, event_ical):
 
 
 @pytest.mark.parametrize("event_ical", [_SINGLE_EVENT_ICAL])
-def test__sync_event_update(tmp_path: pathlib.Path, event_ical):
+def test__sync_event_update(tmp_path: pathlib.Path, event_ical: bytes) -> None:
     event = icalendar.cal.Event.from_ical(event_ical)
     ical2vdir._sync_event(event, tmp_path)
     event["SUMMARY"] += " suffix"
@@ -119,7 +119,7 @@ def test__sync_event_update(tmp_path: pathlib.Path, event_ical):
 
 
 @pytest.mark.parametrize("event_ical", [_SINGLE_EVENT_ICAL])
-def test__sync_event_unchanged(tmp_path: pathlib.Path, event_ical):
+def test__sync_event_unchanged(tmp_path: pathlib.Path, event_ical: bytes) -> None:
     event = icalendar.cal.Event.from_ical(event_ical)
     ical2vdir._sync_event(event, tmp_path)
     (ics_path,) = tmp_path.iterdir()

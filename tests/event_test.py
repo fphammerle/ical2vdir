@@ -144,7 +144,9 @@ END:VEVENT
         ]
     ),
 )
-def test__events_equal(event_a_ical, event_b_ical, expected_result):
+def test__events_equal(
+    event_a_ical: str, event_b_ical: str, expected_result: bool
+) -> None:
     event_a = icalendar.cal.Event.from_ical(event_a_ical)
     event_b = icalendar.cal.Event.from_ical(event_b_ical)
     # pylint: disable=protected-access

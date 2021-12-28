@@ -26,7 +26,7 @@ from ical2vdir import _event_prop_equal
 _CEST = datetime.timezone(datetime.timedelta(hours=+2))
 
 
-def _parametrize(obj: typing.Any, params: dict) -> typing.Any:
+def _parametrize(obj: typing.Any, params: typing.Dict[str, str]) -> typing.Any:
     for key, value in params.items():
         obj.params.__setitem__(key, value)
     return obj
@@ -203,5 +203,7 @@ def _parametrize(obj: typing.Any, params: dict) -> typing.Any:
         ),
     ],
 )
-def test__event_prop_equal(prop_a, prop_b, expected_result):
+def test__event_prop_equal(
+    prop_a: object, prop_b: object, expected_result: bool
+) -> None:
     assert _event_prop_equal(prop_a, prop_b) == expected_result

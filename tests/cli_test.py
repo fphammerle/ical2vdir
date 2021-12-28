@@ -21,6 +21,7 @@ import pathlib
 import subprocess
 import unittest.mock
 
+import _pytest.logging
 import icalendar
 
 import ical2vdir
@@ -28,13 +29,15 @@ import ical2vdir
 # pylint: disable=protected-access
 
 
-def test_entrypoint_help():
+def test_entrypoint_help() -> None:
     subprocess.run(["ical2vdir", "--help"], check=True, stdout=subprocess.PIPE)
 
 
 def test__main_create_all(
-    caplog, tmp_path: pathlib.Path, google_calendar_file: io.BufferedReader
-):
+    caplog: _pytest.logging.LogCaptureFixture,
+    tmp_path: pathlib.Path,
+    google_calendar_file: io.BufferedReader,
+) -> None:
     with unittest.mock.patch("sys.stdin", google_calendar_file):
         with unittest.mock.patch("sys.argv", ["", "--output-dir", str(tmp_path)]):
             with caplog.at_level(logging.INFO):
@@ -58,8 +61,10 @@ def test__main_create_all(
 
 
 def test__main_create_some(
-    caplog, tmp_path: pathlib.Path, google_calendar_file: io.BufferedReader
-):
+    caplog: _pytest.logging.LogCaptureFixture,
+    tmp_path: pathlib.Path,
+    google_calendar_file: io.BufferedReader,
+) -> None:
     with unittest.mock.patch("sys.stdin", google_calendar_file):
         with unittest.mock.patch("sys.argv", ["", "--output-dir", str(tmp_path)]):
             ical2vdir._main()
@@ -77,8 +82,10 @@ def test__main_create_some(
 
 
 def test__main_update(
-    caplog, tmp_path: pathlib.Path, google_calendar_file: io.BufferedReader
-):
+    caplog: _pytest.logging.LogCaptureFixture,
+    tmp_path: pathlib.Path,
+    google_calendar_file: io.BufferedReader,
+) -> None:
     with unittest.mock.patch("sys.stdin", google_calendar_file):
         with unittest.mock.patch("sys.argv", ["", "--output-dir", str(tmp_path)]):
             ical2vdir._main()
@@ -107,8 +114,10 @@ def test__main_update(
 
 
 def test__main_update_silent(
-    caplog, tmp_path: pathlib.Path, google_calendar_file: io.BufferedReader
-):
+    caplog: _pytest.logging.LogCaptureFixture,
+    tmp_path: pathlib.Path,
+    google_calendar_file: io.BufferedReader,
+) -> None:
     with unittest.mock.patch("sys.stdin", google_calendar_file):
         with unittest.mock.patch(
             "sys.argv", ["", "--output-dir", str(tmp_path), "--silent"]
@@ -130,8 +139,10 @@ def test__main_update_silent(
 
 
 def test__main_update_verbose(
-    caplog, tmp_path: pathlib.Path, google_calendar_file: io.BufferedReader
-):
+    caplog: _pytest.logging.LogCaptureFixture,
+    tmp_path: pathlib.Path,
+    google_calendar_file: io.BufferedReader,
+) -> None:
     with unittest.mock.patch("sys.stdin", google_calendar_file):
         with unittest.mock.patch(
             "sys.argv", ["", "--output-dir", str(tmp_path), "--verbose"]
@@ -165,8 +176,10 @@ def test__main_update_verbose(
 
 
 def test__main_delete(
-    caplog, tmp_path: pathlib.Path, google_calendar_file: io.BufferedReader
-):
+    caplog: _pytest.logging.LogCaptureFixture,
+    tmp_path: pathlib.Path,
+    google_calendar_file: io.BufferedReader,
+) -> None:
     tmp_path.joinpath("will-be-deleted.ics").touch()
     with unittest.mock.patch("sys.stdin", google_calendar_file):
         with unittest.mock.patch(

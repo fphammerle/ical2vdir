@@ -22,6 +22,7 @@ import os
 import pathlib
 import sys
 import tempfile
+import typing
 
 import icalendar
 
@@ -30,7 +31,7 @@ _LOGGER = logging.getLogger(__name__)
 _VDIR_EVENT_FILE_EXTENSION = ".ics"
 
 
-def _event_prop_equal(prop_a, prop_b) -> bool:
+def _event_prop_equal(prop_a: typing.Any, prop_b: typing.Any) -> bool:
     if isinstance(prop_a, list):
         return len(prop_a) == len(prop_b) and all(
             _event_prop_equal(*pair) for pair in zip(prop_a, prop_b)
@@ -46,7 +47,7 @@ def _event_prop_equal(prop_a, prop_b) -> bool:
     if isinstance(prop_a, (icalendar.prop.vDDDTypes, icalendar.prop.vCategory)):
         # pylint: disable=unidiomatic-typecheck
         return type(prop_a) == type(prop_b) and vars(prop_a) == vars(prop_b)
-    return prop_a == prop_b and prop_a.params == prop_b.params
+    return typing.cast(bool, prop_a == prop_b and prop_a.params == prop_b.params)
 
 
 def _events_equal(event_a: icalendar.cal.Event, event_b: icalendar.cal.Event) -> bool:
@@ -90,7 +91,7 @@ def _event_vdir_filename(event: icalendar.cal.Event) -> str:
     return output_filename + _VDIR_EVENT_FILE_EXTENSION
 
 
-def _write_event(event: icalendar.cal.Event, path: pathlib.Path):
+def _write_event(event: icalendar.cal.Event, path: pathlib.Path) -> None:
     # > Creating and modifying items or metadata files should happen atomically.
     # https://vdirsyncer.readthedocs.io/en/stable/vdir.html#writing-to-vdirs
     temp_fd, temp_path = tempfile.mkstemp(
@@ -127,7 +128,7 @@ def _sync_event(
     return output_path
 
 
-def _main():
+def _main() -> None:
     # https://docs.python.org/3/library/logging.html#levels
     logging.basicConfig(
         format="%(message)s",

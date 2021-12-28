@@ -34,6 +34,8 @@ _CEST = datetime.timezone(datetime.timedelta(hours=+2))
         ),
     ],
 )
-def test__datetime_basic_isoformat(dt_obj, expected_str):
+def test__datetime_basic_isoformat(
+    dt_obj: datetime.datetime, expected_str: str
+) -> None:
     # pylint: disable=protected-access
     assert ical2vdir._datetime_basic_isoformat(dt_obj) == expected_str
