@@ -6,10 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
-- added `pyproject.toml` to specify build dependencies & build backend
+- `pyproject.toml` to specify build dependencies & build backend
 
 ### Removed
-- compatibility with `python3.5`
+- compatibility with `python3.5` & `python3.6`
 
 ## [0.1.2] - 2020-06-18
 ### Fixed
