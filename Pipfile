@@ -7,7 +7,7 @@ name = "pypi"
 ical2vdir = {editable = true,path = "."}
 
 [dev-packages]
-black = "==21.12b0"
+black = "*"
 # >=0.1.1 for https://github.com/blu3r4y/blinkcheck/pull/2
 blinkcheck = {version = ">=0.1.1", markers = "python_version >= '3.8'"}
 mypy = "*"
