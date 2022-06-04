@@ -28,7 +28,7 @@ _CEST = datetime.timezone(datetime.timedelta(hours=+2))
 
 def _parametrize(obj: typing.Any, params: typing.Dict[str, str]) -> typing.Any:
     for key, value in params.items():
-        obj.params.__setitem__(key, value)
+        obj.params[key] = value
     return obj
 
 
