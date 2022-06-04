@@ -21,7 +21,7 @@ import pathlib
 import subprocess
 import unittest.mock
 
-import _pytest.logging
+import _pytest.logging  # pylint: disable=import-private-name; tests
 import icalendar
 
 import ical2vdir
