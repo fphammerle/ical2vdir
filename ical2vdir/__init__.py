@@ -97,7 +97,7 @@ def _write_event(event: icalendar.cal.Event, path: pathlib.Path) -> None:
     temp_fd, temp_path = tempfile.mkstemp(
         prefix="ical2vdir-", suffix=_VDIR_EVENT_FILE_EXTENSION
     )
-    try:  # pylint: disable=too-many-try-statements
+    try:
         # > Content lines are delimited by a line break,
         # > which is a CRLF sequence [...]
         # https://tools.ietf.org/html/rfc5545#section-3.1

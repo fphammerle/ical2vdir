@@ -1,8 +1,6 @@
 [MASTER]
 
-load-plugins=pylint.extensions.bad_builtin,
-             pylint.extensions.broad_try_clause,
-             pylint.extensions.check_elif,
+load-plugins=pylint.extensions.check_elif,
              pylint.extensions.comparison_placement,
              pylint.extensions.confusing_elif,
              pylint.extensions.consider_ternary_expression,
@@ -16,8 +14,7 @@ load-plugins=pylint.extensions.bad_builtin,
              pylint.extensions.redefined_loop_name,
              pylint.extensions.redefined_variable_type,
              pylint.extensions.set_membership,
-             pylint.extensions.typing,
-             pylint.extensions.while_used
+             pylint.extensions.typing
 
 [MESSAGES CONTROL]
 
