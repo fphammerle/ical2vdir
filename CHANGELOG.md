@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 - compatibility with `python3.5` & `python3.6`
 
+### Fixed
+- fix export when output and temporary directory are on different filesystems
+  (https://github.com/fphammerle/ical2vdir/pull/85)
+
 ## [0.1.2] - 2020-06-18
 ### Fixed
 - python3.5:
