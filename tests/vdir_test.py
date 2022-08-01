@@ -18,6 +18,7 @@
 import copy
 import os
 import pathlib
+import tempfile
 import unittest.mock
 
 import icalendar.cal
@@ -55,12 +56,23 @@ END:VEVENT
 
 def test__write_event_cleanup(tmp_path: pathlib.Path) -> None:
     event = icalendar.cal.Event.from_ical(_SINGLE_EVENT_ICAL)
-    with unittest.mock.patch("os.unlink") as unlink_mock:
-        with pytest.raises(IsADirectoryError):
-            ical2vdir._write_event(event, tmp_path)
-    unlink_mock.assert_called_once()
+    with pytest.raises(IsADirectoryError):
+        ical2vdir._write_event(event, tmp_path)
+    assert tmp_path.is_dir()  # did not overwrite
+
+
+def test__write_event_move_failed(tmp_path: pathlib.Path) -> None:
+    event = icalendar.cal.Event.from_ical(_SINGLE_EVENT_ICAL)
+    output_path = tmp_path.joinpath("test.ics")
+    with unittest.mock.patch("os.unlink") as unlink_mock, unittest.mock.patch(
+        "shutil.move", side_effect=Exception("test")
+    ), pytest.raises(Exception, match=r"^test$"):
+        ical2vdir._write_event(event, output_path)
+    assert not output_path.exists()
+    unlink_mock.assert_called_once()  # cleanup temporary file
     unlink_args, _ = unlink_mock.call_args
-    os.unlink(unlink_args[0])
+    (temp_path,) = unlink_args
+    assert os.path.dirname(temp_path) == os.path.dirname(tempfile.mkdtemp())
 
 
 @pytest.mark.parametrize(

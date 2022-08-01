@@ -19,6 +19,7 @@ import argparse
 import datetime
 import logging
 import os
+import shutil
 import pathlib
 import sys
 import tempfile
@@ -92,6 +93,8 @@ def _event_vdir_filename(event: icalendar.cal.Event) -> str:
 
 
 def _write_event(event: icalendar.cal.Event, path: pathlib.Path) -> None:
+    if path.is_dir():
+        raise IsADirectoryError(path)  # similar to os.rename
     # > Creating and modifying items or metadata files should happen atomically.
     # https://vdirsyncer.readthedocs.io/en/stable/vdir.html#writing-to-vdirs
     temp_fd, temp_path = tempfile.mkstemp(
@@ -103,8 +106,7 @@ def _write_event(event: icalendar.cal.Event, path: pathlib.Path) -> None:
         # https://tools.ietf.org/html/rfc5545#section-3.1
         os.write(temp_fd, event.to_ical())
         os.close(temp_fd)
-        # python3.5 expects Union[bytes, str]
-        os.rename(temp_path, str(path))
+        shutil.move(temp_path, path)
     finally:
         if os.path.exists(temp_path):
             os.unlink(temp_path)
