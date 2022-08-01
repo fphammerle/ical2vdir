@@ -104,7 +104,13 @@ def _write_event(event: icalendar.cal.Event, path: pathlib.Path) -> None:
         os.write(temp_fd, event.to_ical())
         os.close(temp_fd)
         # python3.5 expects Union[bytes, str]
-        os.rename(temp_path, str(path))
+        if os.path.isfile(temp_path) and os.path.isdir(str(path)):
+            raise IsADirectoryError
+        elif os.path.isdir(temp_path) and os.path.isfile(str(path)):
+            raise NotADirectoryError
+        else:
+            shutil.copy(temp_path, str(path))
+            os.remove(temp_path)
     finally:
         if os.path.exists(temp_path):
             os.unlink(temp_path)
