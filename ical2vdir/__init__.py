@@ -19,7 +19,6 @@ import argparse
 import datetime
 import logging
 import os
-import shutil
 import pathlib
 import sys
 import tempfile
@@ -105,8 +104,7 @@ def _write_event(event: icalendar.cal.Event, path: pathlib.Path) -> None:
         os.write(temp_fd, event.to_ical())
         os.close(temp_fd)
         # python3.5 expects Union[bytes, str]
-        shutil.copy(temp_path, str(path))
-        os.remove(temp_path)
+        os.rename(temp_path, str(path))
     finally:
         if os.path.exists(temp_path):
             os.unlink(temp_path)
