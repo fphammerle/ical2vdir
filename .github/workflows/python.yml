@@ -73,6 +73,17 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         # https://github.com/TheKevJames/coveralls-python/issues/240#issuecomment-758336355
         COVERALLS_SERVICE_NAME: github
+  install:
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-python@v4
+      with: {python-version: 3.9}
+    - run: '! ical2vdir --help'
+    - run: pip install wheel==0.37.1
+    - run: python setup.py bdist_wheel
+    - run: pip install dist/*.whl
+    - run: ical2vdir --help
   check-links:
     runs-on: ubuntu-20.04
     strategy:
