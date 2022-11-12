@@ -23,6 +23,11 @@ pytest-cov = "*"
 typing-extensions = {markers = ""}
 # mypy on python<3.8
 typed-ast = {markers = "python_version < '3.8'"}
+# python<3.11 compatibility
+# >    File "[...]/lib/python3.10/site-packages/_pytest/_code/code.py", line 60, in <module>
+# >     from exceptiongroup import BaseExceptionGroup
+# > ModuleNotFoundError: No module named 'exceptiongroup'
+exceptiongroup = {markers = "python_version < '3.11'"}
 
 [requires]
 python_version = "3"
