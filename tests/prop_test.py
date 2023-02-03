@@ -147,18 +147,18 @@ def _parametrize(obj: typing.Any, params: typing.Dict[str, str]) -> typing.Any:
             vCalAddress("someelse@somewhere.com"),
             _parametrize(
                 vCalAddress("someelse@somewhere.com"),
-                dict(UTYPE="INDIVIDUAL", PARTSTAT="ACCEPTED"),
+                {"UTYPE": "INDIVIDUAL", "PARTSTAT": "ACCEPTED"},
             ),
             False,
         ),
         (
             _parametrize(
                 vCalAddress("someelse@somewhere.com"),
-                dict(UTYPE="INDIVIDUAL", PARTSTAT="ACCEPTED"),
+                {"UTYPE": "INDIVIDUAL", "PARTSTAT": "ACCEPTED"},
             ),
             _parametrize(
                 vCalAddress("someelse@somewhere.com"),
-                dict(UTYPE="INDIVIDUAL", PARTSTAT="ACCEPTED"),
+                {"UTYPE": "INDIVIDUAL", "PARTSTAT": "ACCEPTED"},
             ),
             True,
         ),
@@ -175,7 +175,7 @@ def _parametrize(obj: typing.Any, params: typing.Dict[str, str]) -> typing.Any:
                 ),
                 _parametrize(
                     vCalAddress("someelse@somewhere.com"),
-                    dict(UTYPE="INDIVIDUAL", PARTSTAT="ACCEPTED"),
+                    {"UTYPE": "INDIVIDUAL", "PARTSTAT": "ACCEPTED"},
                 ),
             ],
             False,
@@ -187,7 +187,7 @@ def _parametrize(obj: typing.Any, params: typing.Dict[str, str]) -> typing.Any:
                 ),
                 _parametrize(
                     vCalAddress("someelse@somewhere.com"),
-                    dict(UTYPE="INDIVIDUAL", PARTSTAT="ACCEPTED"),
+                    {"UTYPE": "INDIVIDUAL", "PARTSTAT": "ACCEPTED"},
                 ),
             ],
             [
@@ -196,7 +196,7 @@ def _parametrize(obj: typing.Any, params: typing.Dict[str, str]) -> typing.Any:
                 ),
                 _parametrize(
                     vCalAddress("someelse@somewhere.com"),
-                    dict(UTYPE="INDIVIDUAL", PARTSTAT="ACCEPTED"),
+                    {"UTYPE": "INDIVIDUAL", "PARTSTAT": "ACCEPTED"},
                 ),
             ],
             True,
