@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `pyproject.toml` to specify build dependencies & build backend
 
 ### Removed
-- compatibility with `python3.5` & `python3.6`
+- compatibility with `python3.5`, `python3.6` & `python3.7`
 
 ### Fixed
 - fix export when output and temporary directory are on different filesystems
