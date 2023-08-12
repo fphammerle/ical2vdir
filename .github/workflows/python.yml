@@ -23,7 +23,7 @@ jobs:
         python-version: ${{ matrix.python-version }}
         # did not reduce runtime of `pipenv install` (still approx. 1 min)
         #cache: pipenv
-    - run: pip install --upgrade pipenv==2023.5.19
+    - run: pip install --upgrade pipenv==2023.6.12
     - run: pipenv install --python "$PYTHON_VERSION" --deploy --dev
       env:
         PYTHON_VERSION: ${{ matrix.python-version }}
@@ -46,7 +46,7 @@ jobs:
         python-version: ${{ matrix.python-version }}
         # did not reduce runtime of `pipenv install` (still approx. 1 min)
         #cache: pipenv
-    - run: pip install --upgrade pipenv==2023.5.19
+    - run: pip install --upgrade pipenv==2023.6.12
     # by default pipenv picks the latest version in PATH
     - run: pipenv install --python "$PYTHON_VERSION" --deploy --dev
       env:
@@ -85,7 +85,7 @@ jobs:
     - uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
-    - run: pip install --upgrade pipenv==2023.5.19
+    - run: pip install --upgrade pipenv==2023.6.12
     - run: pipenv install --python "$PYTHON_VERSION" --deploy --dev
       env:
         PYTHON_VERSION: ${{ matrix.python-version }}
