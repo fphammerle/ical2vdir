@@ -46,6 +46,13 @@ jobs:
         python-version: ${{ matrix.python-version }}
         # did not reduce runtime of `pipenv install` (still approx. 1 min)
         #cache: pipenv
+    # with pipenv v2023.6.26:
+    # > $ pipenv run pytest --cov="$(cat *.egg-info/top_level.txt)"
+    # . --cov-report=term-missing --cov-fail-under=100
+    # > cat: '*.egg-info/top_level.txt': No such file or directory
+    # > [...]
+    # > [...]/coverage/inorout.py:507: CoverageWarning:
+    # . Module  was never imported. (module-not-imported)
     - run: pip install --upgrade pipenv==2023.6.18
     # by default pipenv picks the latest version in PATH
     - run: pipenv install --python "$PYTHON_VERSION" --deploy --dev
