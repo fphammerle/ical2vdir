@@ -8,12 +8,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - declare compatibility with `python3.11`
 
+### Removed
+- compatibility with `python3.7`
+
 ## [1.0.0] - 2022-08-01
 ### Added
 - `pyproject.toml` to specify build dependencies & build backend
 
 ### Removed
-- compatibility with `python3.5`, `python3.6` & `python3.7`
+- compatibility with `python3.5` & `python3.6`
 
 ### Fixed
 - fix export when output and temporary directory are on different filesystems
