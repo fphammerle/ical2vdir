@@ -60,7 +60,7 @@ jobs:
         PYTHON_VERSION: ${{ matrix.python-version }}
     - run: pipenv graph
     - run: pipenv run pytest --cov="$(cat *.egg-info/top_level.txt)" --cov-report=term-missing --cov-fail-under=100
-    - run: pipenv run pylint --load-plugins=pylint_import_requirements "$(cat *.egg-info/top_level.txt)"
+    - run: pipenv run pylint "$(cat *.egg-info/top_level.txt)"
     # workaround pylint reporting:
     # > E0401: Unable to import 'ical2vdir' (import-error)
     # pyproject.toml broken?
