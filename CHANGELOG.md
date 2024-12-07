@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - declare compatibility with `python3.11`
 
 ### Removed
-- compatibility with `python3.7`
+- compatibility with `python3.7` & `python3.8`
 
 ## [1.0.0] - 2022-08-01
 ### Added
