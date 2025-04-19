@@ -12,7 +12,7 @@ on:
 
 jobs:
   code-format:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     strategy:
       matrix:
         python-version: ['3.11']
@@ -30,7 +30,7 @@ jobs:
     - run: pipenv graph
     - run: pipenv run black --check .
   tests:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     strategy:
       matrix:
         python-version:
@@ -73,7 +73,7 @@ jobs:
     - run: pipenv run pylint tests
     - run: pipenv run mypy "$(cat *.egg-info/top_level.txt)" tests
   install:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-python@v5
@@ -84,7 +84,7 @@ jobs:
     - run: pip install dist/*.whl
     - run: ical2vdir --help
   check-links:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     strategy:
       matrix:
         python-version: ['3.9']
