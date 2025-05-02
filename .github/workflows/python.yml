@@ -79,7 +79,7 @@ jobs:
     - uses: actions/setup-python@v5
       with: {python-version: 3.9}
     - run: '! ical2vdir --help'
-    - run: pip install wheel==0.37.1
+    - run: pip install wheel==0.45.1
     - run: python setup.py bdist_wheel
     - run: pip install dist/*.whl
     - run: ical2vdir --help
