@@ -18,7 +18,7 @@ jobs:
         python-version: ['3.11']
     steps:
     - uses: actions/checkout@v4
-    - uses: actions/setup-python@v5
+    - uses: actions/setup-python@v6
       with:
         python-version: ${{ matrix.python-version }}
         # did not reduce runtime of `pipenv install` (still approx. 1 min)
@@ -40,7 +40,7 @@ jobs:
       fail-fast: false
     steps:
     - uses: actions/checkout@v4
-    - uses: actions/setup-python@v5
+    - uses: actions/setup-python@v6
       with:
         python-version: ${{ matrix.python-version }}
         # did not reduce runtime of `pipenv install` (still approx. 1 min)
@@ -76,7 +76,7 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
     - uses: actions/checkout@v4
-    - uses: actions/setup-python@v5
+    - uses: actions/setup-python@v6
       with: {python-version: 3.9}
     - run: '! ical2vdir --help'
     - run: pip install wheel==0.45.1
@@ -90,7 +90,7 @@ jobs:
         python-version: ['3.9']
     steps:
     - uses: actions/checkout@v4
-    - uses: actions/setup-python@v5
+    - uses: actions/setup-python@v6
       with:
         python-version: ${{ matrix.python-version }}
     - run: pip install --upgrade pipenv==2024.1.0
