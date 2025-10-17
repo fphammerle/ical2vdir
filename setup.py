@@ -42,7 +42,6 @@ setuptools.setup(
         "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
         "Operating System :: OS Independent",
         # .github/workflows/python.yml
-        "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
         "Topic :: Utilities",
@@ -52,7 +51,8 @@ setuptools.setup(
             "ical2vdir = ical2vdir:_main",
         ]
     },
-    python_requires=">=3.9",  # python<3.9 untested
+    # >=3.9 type hint dict[…] (PEP585)
+    python_requires=">=3.10",  # python<3.10 untested
     install_requires=["icalendar>=4,<5"],
     setup_requires=["setuptools_scm"],
     tests_require=["pytest"],

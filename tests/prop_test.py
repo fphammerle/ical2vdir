@@ -26,7 +26,7 @@ from ical2vdir import _event_prop_equal
 _CEST = datetime.timezone(datetime.timedelta(hours=+2))
 
 
-def _parametrize(obj: typing.Any, params: typing.Dict[str, str]) -> typing.Any:
+def _parametrize(obj: typing.Any, params: dict[str, str]) -> typing.Any:
     for key, value in params.items():
         obj.params[key] = value
     return obj
