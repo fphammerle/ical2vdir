@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 - compatibility with `python3.7`, `python3.8` & `python3.9`
 
+### Fixed
+- assertion error on "RECURRENCE-ID;VALUE=DATE:…"
+
 ## [1.0.0] - 2022-08-01
 ### Added
 - `pyproject.toml` to specify build dependencies & build backend

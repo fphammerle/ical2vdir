@@ -19,8 +19,8 @@ import argparse
 import datetime
 import logging
 import os
-import shutil
 import pathlib
+import shutil
 import sys
 import tempfile
 import typing
@@ -86,9 +86,11 @@ def _event_vdir_filename(event: icalendar.cal.Event) -> str:
     output_filename = str(event["UID"])
     if "RECURRENCE-ID" in event:
         recurrence_id = event["RECURRENCE-ID"]
-        assert isinstance(recurrence_id.dt, datetime.datetime), recurrence_id.dt
-
-        output_filename += "." + _datetime_basic_isoformat(recurrence_id.dt)
+        if isinstance(recurrence_id.dt, datetime.datetime):
+            output_filename += "." + _datetime_basic_isoformat(recurrence_id.dt)
+        else:
+            assert isinstance(recurrence_id.dt, datetime.date), vars(recurrence_id)
+            output_filename += "." + recurrence_id.dt.strftime("%Y%m%d")
     return output_filename + _VDIR_EVENT_FILE_EXTENSION
 
 

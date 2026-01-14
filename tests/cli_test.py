@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+import datetime
 import io
 import logging
 import pathlib
@@ -58,6 +59,30 @@ def test__main_create_all(
     assert isinstance(event, icalendar.cal.Event)
     assert event["UID"] == "recurr1234567890qwertyuiop@google.com"
     assert event["SUMMARY"] == "recurring"
+
+
+def test__main_create_all_recurrence_id_date(
+    caplog: _pytest.logging.LogCaptureFixture, tmp_path: pathlib.Path
+) -> None:
+    with pathlib.Path(__file__).parent.joinpath(
+        "resources", "nextcloud-recurring.ics"
+    ).open("rb") as calendar_file:
+        with unittest.mock.patch("sys.stdin", calendar_file), unittest.mock.patch(
+            "sys.argv", ["", "--output-dir", str(tmp_path)]
+        ), caplog.at_level(logging.WARNING):
+            ical2vdir._main()
+    created_item_paths = sorted(tmp_path.iterdir())
+    assert [p.name for p in created_item_paths] == [
+        "b0fea373-389b-48d5-b739-9de3e298f555.20260101.ics",
+        "b0fea373-389b-48d5-b739-9de3e298f555.20260201.ics",
+        "b0fea373-389b-48d5-b739-9de3e298f555.20260301.ics",
+    ]
+    assert not caplog.records
+    event = icalendar.cal.Event.from_ical(created_item_paths[1].read_bytes())
+    assert isinstance(event, icalendar.cal.Event)
+    assert event["UID"] == "b0fea373-389b-48d5-b739-9de3e298f555"
+    assert event["SUMMARY"] == "second"
+    assert event["RECURRENCE-ID"].dt == datetime.date(2026, 2, 1)
 
 
 def test__main_create_some(
