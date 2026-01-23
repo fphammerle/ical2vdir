@@ -31,8 +31,7 @@ def _normalize_ical(ical: bytes) -> bytes:
     return ical.replace(b"\n", b"\r\n")
 
 
-_SINGLE_EVENT_ICAL = _normalize_ical(
-    b"""BEGIN:VEVENT
+_SINGLE_EVENT_ICAL = _normalize_ical(b"""BEGIN:VEVENT
 SUMMARY:party
 DTSTART:20201024T100000Z
 DTEND:20201026T120000Z
@@ -46,8 +45,7 @@ LOCATION:
 STATUS:CONFIRMED
 TRANSP:OPAQUE
 END:VEVENT
-"""
-)
+""")
 
 # pylint: disable=protected-access
 
