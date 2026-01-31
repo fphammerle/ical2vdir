@@ -41,11 +41,13 @@ def _event_prop_equal(prop_a: typing.Any, prop_b: typing.Any) -> bool:
         )
     if isinstance(prop_a, icalendar.prop.vDDDLists):
         # https://www.kanzaki.com/docs/ical/exdate.html
+        assert (  # icalendar v5
+            not hasattr(prop_a, "params") and not hasattr(prop_b, "params")
+        ) or prop_a.params == prop_b.params  # icalendar v4
         return (
             isinstance(prop_b, icalendar.prop.vDDDLists)
             and len(prop_a.dts) == len(prop_b.dts)
             and all(_event_prop_equal(*pair) for pair in zip(prop_a.dts, prop_b.dts))
-            and prop_a.params == prop_b.params
         )
     if isinstance(prop_a, (icalendar.prop.vDDDTypes, icalendar.prop.vCategory)):
         # pylint: disable=unidiomatic-typecheck

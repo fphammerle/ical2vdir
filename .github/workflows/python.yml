@@ -73,6 +73,20 @@ jobs:
         PYTHON_VERSION: ${{ matrix.python-version }}
     - run: pipenv run pylint tests
     - run: pipenv run mypy "$(cat *.egg-info/top_level.txt)" tests
+  tests-icalendar-v4:
+    runs-on: ubuntu-24.04
+    strategy: {matrix: {python-version: ['3.10']}}
+    steps:
+    - uses: actions/checkout@v6
+    - uses: actions/setup-python@v6
+      with: {python-version: '${{ matrix.python-version }}'}
+    - run: pip install --upgrade pipenv==2023.6.18
+    - run: pipenv install --python "$PYTHON_VERSION" --deploy --dev
+      env: {PYTHON_VERSION: '${{ matrix.python-version }}'}
+    - run: pipenv run pip install icalendar==4.1.2
+    - run: pipenv graph
+    - run: pipenv run pytest --cov="$(cat *.egg-info/top_level.txt)"
+        --cov-report=term-missing --cov-fail-under=100
   install:
     runs-on: ubuntu-24.04
     steps:
