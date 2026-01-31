@@ -34,8 +34,10 @@ _VDIR_EVENT_FILE_EXTENSION = ".ics"
 
 def _event_prop_equal(prop_a: typing.Any, prop_b: typing.Any) -> bool:
     if isinstance(prop_a, list):
-        return len(prop_a) == len(prop_b) and all(
-            _event_prop_equal(*pair) for pair in zip(prop_a, prop_b)
+        return (
+            isinstance(prop_b, list)
+            and len(prop_a) == len(prop_b)
+            and all(_event_prop_equal(*pair) for pair in zip(prop_a, prop_b))
         )
     if isinstance(prop_a, icalendar.prop.vDDDLists):
         # https://www.kanzaki.com/docs/ical/exdate.html
