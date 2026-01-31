@@ -55,7 +55,7 @@ setuptools.setup(
     },
     # >=3.9 type hint dict[…] (PEP585)
     python_requires=">=3.10",  # python<3.10 untested
-    install_requires=["icalendar>=4,<6"],
+    install_requires=["icalendar>=4,<7"],
     setup_requires=["setuptools_scm"],
     tests_require=["pytest"],
 )
