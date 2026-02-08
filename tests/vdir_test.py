@@ -99,6 +99,18 @@ END:VEVENT
 """,
             "1qa2ws3ed4rf5tg@google.com.20150924T090000+0200.ics",
         ),
+        (
+            b"""BEGIN:VTODO
+UID:d6c1f8fa-0dfa-4d31-a988-6e7876fe3222
+CREATED:20260208T070025Z
+LAST-MODIFIED:20260208T070338Z
+DTSTAMP:20260208T070338Z
+SUMMARY:test 1
+DTSTART;VALUE=DATE:20260208
+END:VTODO
+""",
+            "d6c1f8fa-0dfa-4d31-a988-6e7876fe3222.ics",
+        ),
     ],
 )
 def test__event_vdir_filename(event_ical: bytes, expected_filename: str) -> None:

@@ -85,6 +85,29 @@ def test__main_create_all_recurrence_id_date(
     assert event["RECURRENCE-ID"].dt == datetime.date(2026, 2, 1)
 
 
+def test__main_create_all_tasks(
+    caplog: _pytest.logging.LogCaptureFixture, tmp_path: pathlib.Path
+) -> None:
+    with pathlib.Path(__file__).parent.joinpath(
+        "resources", "nextcloud-tasks.ics"
+    ).open("rb") as calendar_file:
+        with unittest.mock.patch("sys.stdin", calendar_file), unittest.mock.patch(
+            "sys.argv", ["", "--output-dir", str(tmp_path)]
+        ), caplog.at_level(logging.WARNING):
+            ical2vdir._main()
+    created_item_paths = sorted(tmp_path.iterdir())
+    assert [p.name for p in created_item_paths] == [
+        "1e6554b1-7ec6-4b58-9688-1dd141ea22cd.ics",
+        "d6c1f8fa-0dfa-4d31-a988-6e7876fe3222.ics",
+    ]
+    assert not caplog.records
+    task = icalendar.cal.Event.from_ical(created_item_paths[0].read_bytes())
+    assert isinstance(task, icalendar.cal.Todo)
+    assert task["UID"] == "1e6554b1-7ec6-4b58-9688-1dd141ea22cd"
+    assert task["SUMMARY"] == "test 2"
+    assert task["DUE"].dt == datetime.date(2026, 2, 9)
+
+
 def test__main_create_some(
     caplog: _pytest.logging.LogCaptureFixture,
     tmp_path: pathlib.Path,

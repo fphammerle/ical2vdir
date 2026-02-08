@@ -55,7 +55,11 @@ def _event_prop_equal(prop_a: typing.Any, prop_b: typing.Any) -> bool:
     return typing.cast(bool, prop_a == prop_b and prop_a.params == prop_b.params)
 
 
-def _events_equal(event_a: icalendar.cal.Event, event_b: icalendar.cal.Event) -> bool:
+def _events_equal(
+    event_a: icalendar.cal.Component, event_b: icalendar.cal.Component
+) -> bool:
+    if event_a.name != event_b.name:  # "VEVENT", "VTODO"
+        return False
     for key, prop_a in event_a.items():
         if key == "DTSTAMP":
             continue
@@ -81,7 +85,7 @@ def _datetime_basic_isoformat(dt_obj: datetime.datetime) -> str:
     return dt_obj.strftime("%Y%m%dT%H%M%S%z")
 
 
-def _event_vdir_filename(event: icalendar.cal.Event) -> str:
+def _event_vdir_filename(event: icalendar.cal.Component) -> str:
     # > An item should contain a UID property as described by the vCard and iCalendar standards.
     # > [...] The filename should have similar properties as the UID of the file content.
     # > However, there is no requirement for these two to be the same.
@@ -98,7 +102,7 @@ def _event_vdir_filename(event: icalendar.cal.Event) -> str:
     return output_filename + _VDIR_EVENT_FILE_EXTENSION
 
 
-def _write_event(event: icalendar.cal.Event, path: pathlib.Path) -> None:
+def _write_event(event: icalendar.cal.Component, path: pathlib.Path) -> None:
     if path.is_dir():
         raise IsADirectoryError(path)  # similar to os.rename
     # > Creating and modifying items or metadata files should happen atomically.
@@ -119,7 +123,7 @@ def _write_event(event: icalendar.cal.Event, path: pathlib.Path) -> None:
 
 
 def _sync_event(
-    event: icalendar.cal.Event, output_dir_path: pathlib.Path
+    event: icalendar.cal.Component, output_dir_path: pathlib.Path
 ) -> pathlib.Path:
     output_path = output_dir_path.joinpath(_event_vdir_filename(event))
     if not output_path.exists():
@@ -189,7 +193,7 @@ def _main() -> None:
         if path.is_file() and path.name.endswith(_VDIR_EVENT_FILE_EXTENSION)
     )
     for component in calendar.subcomponents:
-        if isinstance(component, icalendar.cal.Event):
+        if isinstance(component, (icalendar.cal.Event, icalendar.cal.Todo)):
             extra_paths.discard(
                 _sync_event(event=component, output_dir_path=args.output_dir_path)
             )

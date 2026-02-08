@@ -6,7 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
-- support [icalendar](https://github.com/collective/icalendar/blob/main/CHANGES.rst)
+- support for tasks (`VTODO`)
+- support for [icalendar](https://github.com/collective/icalendar/blob/main/CHANGES.rst)
   library v5 & v6
 
 ### Fixed

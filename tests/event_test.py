@@ -190,6 +190,23 @@ END:VEVENT
 """,
                 False,
             ),
+            (
+                b"""BEGIN:VEVENT
+UID:d6c1f8fa-0dfa-4d31-a988-6e7876fe3222
+DTSTAMP:20260208T070338Z
+SUMMARY:test
+DTSTART;VALUE=DATE:20260208
+END:VEVENT
+""",
+                b"""BEGIN:VTODO
+UID:d6c1f8fa-0dfa-4d31-a988-6e7876fe3222
+DTSTAMP:20260208T070338Z
+SUMMARY:test
+DTSTART;VALUE=DATE:20260208
+END:VTODO
+""",
+                False,
+            ),
         ]
     ),
 )
