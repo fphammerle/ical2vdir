@@ -6,6 +6,8 @@
   record the lesson in `AGENTS.md` **automatically**, without being asked, so it isn't repeated.
 - If a mistake recurs although a rule for it already exists, make that rule stricter and more
   concrete (e.g. a mandatory check before acting) instead of just restating it.
+- When writing or updating `AGENTS.md`, only add information that isn't already obvious from the
+  repository itself (e.g. Git LFS tracking is visible in `.gitattributes` and marked on GitHub).
 
 ## Commit messages
 
